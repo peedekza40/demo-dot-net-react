@@ -1,0 +1,1 @@
+Scaffold-DbContext "Host=localhost;Port=5432;Database=PracticeReact;User Id=postgres;Password=pass@word1;" Npgsql.EntityFrameworkCore.PostgreSQL -ContextDir Data -o Models -Schemas "public"
