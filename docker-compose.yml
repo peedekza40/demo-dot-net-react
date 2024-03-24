@@ -3,6 +3,7 @@ version: '3.9'
 services:
   postgres:
     image: postgres:15.5
+    container_name: local_pgdb
     ports:
       - 5432:5432
     volumes:
@@ -11,3 +12,13 @@ services:
       - POSTGRES_PASSWORD=pass@word1
       - POSTGRES_USER=postgres
       # - POSTGRES_DB=citizix_db
+  pgadmin4:
+    image: dpage/pgadmin4
+    container_name: pgadmin4_container
+    ports:
+      - 5050:80
+    volumes:
+      - ~/apps/pgadmin4:/var/lib/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: user-name@domain-name.com
+      PGADMIN_DEFAULT_PASSWORD: strong-password

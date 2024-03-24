@@ -137,16 +137,15 @@ export default function LoginView() {
                 {renderAlert()}
                 <Stack spacing={3}>
                     <TextField
-                        name="email"
                         label="Email address *"
                         {...register('email')}
+                        name="email"
                         error={!!errors.email}
                         helperText={errors.email?.message}
                         onChange={resetStatus}
                     />
 
                     <TextField
-                        name="password"
                         label="Password *"
                         type={showPassword ? 'text' : 'password'}
                         InputProps={{
@@ -159,6 +158,7 @@ export default function LoginView() {
                             ),
                         }}
                         {...register('password')}
+                        name="password"
                         error={!!errors.password}
                         helperText={errors.password?.message}
                         onChange={resetStatus}

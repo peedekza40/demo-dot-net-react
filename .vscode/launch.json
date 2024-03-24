@@ -1,0 +1,56 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": ".NET Core Launch (web)",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/PracticeReactApp.Server/bin/Debug/net8.0/PracticeReactApp.Server.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}",
+            "stopAtEntry": false,
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/PracticeReactApp.Server/Views"
+            }
+        },
+        {
+            "name": ".NET Core Attach",
+            "type": "coreclr",
+            "request": "attach"
+        },
+        {
+            "name": "PracticeReactApp.Server.csproj: https",
+            "type": "coreclr",
+            "request": "launch",
+            "program": "${workspaceFolder}/PracticeReactApp.Server/bin/Debug/net8.0/PracticeReactApp.Server.dll",
+            "args": [
+                ""
+            ],
+            "preLaunchTask": "Build: PracticeReactApp.Server.csproj",
+            "cwd": "${workspaceFolder}/PracticeReactApp.Server",
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development",
+                "ASPNETCORE_HOSTINGSTARTUPASSEMBLIES": "Microsoft.AspNetCore.SpaProxy",
+                "ASPNETCORE_URLS": "https://localhost:7146;http://localhost:5160"
+            },
+            "console": "internalConsole",
+            "stopAtEntry": false,
+            "presentation": {
+                "group": "ionide",
+                "hidden": false
+            }
+        }
+    ]
+}

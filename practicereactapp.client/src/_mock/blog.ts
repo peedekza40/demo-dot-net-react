@@ -29,6 +29,21 @@ const POST_TITLES = [
   'How to Animate a SVG with border-image',
 ];
 
+export class Post {
+  public id: string;
+  public cover: string;
+  public title: string;
+  public createdAt: Date;
+  public view: number;
+  public comment: number;
+  public share: number;
+  public favorite: number;
+  public author: {
+    name: string;
+    avatarUrl: string;
+  }
+}
+
 export const posts = [...Array(23)].map((_, index) => ({
   id: faker.string.uuid(),
   cover: `/assets/images/covers/cover_${index + 1}.jpg`,
@@ -42,4 +57,4 @@ export const posts = [...Array(23)].map((_, index) => ({
     name: faker.person.fullName(),
     avatarUrl: `/assets/images/avatars/avatar_${index + 1}.jpg`,
   },
-}));
+} as Post));

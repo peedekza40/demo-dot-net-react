@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createContext, useState, ReactNode } from "react";
 import axios, { AxiosResponse } from "axios";
+import { callbackSuccessType, callbackErrorType, callbackFinishType } from "src/utils/global-type";
 
-export const AuthContext = createContext(null);
-
+//declare type user profile
 type Props = {
     children: ReactNode
 }
@@ -21,6 +21,26 @@ export class UserProfile {
         return `${this.firstName} ${this.lastName}`;
     }
 }
+
+interface IAuthContextValue {
+    login(
+        values: any, 
+        callbackSuccess?: callbackSuccessType,
+        callbackError?: callbackErrorType,
+        callbackFinish?: callbackFinishType
+    ): void,
+    logout(
+        callbackSuccess?: callbackSuccessType
+    ): void,
+    isLogin(
+        callbackSuccess?: callbackSuccessType,
+        callbackError?: callbackErrorType,
+        callbackFinish?: callbackFinishType
+    ): void,
+    userProfile: UserProfile | null
+}
+
+export const AuthContext = createContext<IAuthContextValue>(null!);
 
 function AuthProvider({ children }: Props) {
     const userProfileStorageValue = localStorage.getItem(userProfileStorageKey);

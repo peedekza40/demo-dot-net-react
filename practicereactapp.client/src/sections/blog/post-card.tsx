@@ -15,9 +15,14 @@ import { fShortenNumber } from 'src/utils/format-number';
 import Iconify from 'src/components/iconify';
 import SvgColor from 'src/components/svg-color';
 
-// ----------------------------------------------------------------------
+import { Post } from 'src/_mock/blog';
 
-export default function PostCard({ post, index }) {
+type PostCardProps = {
+  post: Post;
+  index: number;
+};
+// ----------------------------------------------------------------------
+export default function PostCard({ post, index }: PostCardProps) {
   const { cover, title, view, comment, share, author, createdAt } = post;
 
   const latestPostLarge = index === 0;

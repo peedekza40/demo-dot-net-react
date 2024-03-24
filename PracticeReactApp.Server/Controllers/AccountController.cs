@@ -52,6 +52,14 @@ namespace PracticeReactApp.Server.Controllers
         }
 
         [HttpPost]
+        [Route("Register")]
+        public IActionResult Register([FromBody] RegisterViewModel model)
+        {
+            _userManager.CreateAsync(model, model.Password ?? string.Empty);
+            return Ok();
+        }
+
+        [HttpPost]
         [Route("Logout")]
         public async Task<IActionResult> Logout()
         {
