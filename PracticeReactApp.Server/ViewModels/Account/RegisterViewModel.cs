@@ -1,5 +1,3 @@
-using Microsoft.AspNetCore.Identity;
-using PracticeReactApp.Server.Constants;
 using PracticeReactApp.Server.Models;
 
 namespace PracticeReactApp.Server.ViewModels.Account

@@ -1,30 +1,20 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createContext, useState, ReactNode } from "react";
-import axios, { AxiosResponse } from "axios";
+import axios from "axios";
 import { callbackSuccessType, callbackErrorType, callbackFinishType } from "src/utils/global-type";
+import config from "src/config.json";
+
+import UserProfile from "@/models/UserProfile";
+import LoginForm from "@/models/LoginForm";
 
 //declare type user profile
 type Props = {
     children: ReactNode
 }
 
-const userProfileStorageKey = "userProfile";
-export class UserProfile {
-    public userName: string;
-    public email: string;
-    public firstName: string;
-    public lastName: string;
-    public photoURL: string = '/assets/images/avatars/avatar_25.jpg';
-    public role: string;
-
-    public get displayName() {
-        return `${this.firstName} ${this.lastName}`;
-    }
-}
-
 interface IAuthContextValue {
     login(
-        values: any, 
+        values: LoginForm, 
         callbackSuccess?: callbackSuccessType,
         callbackError?: callbackErrorType,
         callbackFinish?: callbackFinishType
@@ -40,18 +30,20 @@ interface IAuthContextValue {
     userProfile: UserProfile | null
 }
 
+const userProfileStorageKey = "userProfile";
+
 export const AuthContext = createContext<IAuthContextValue>(null!);
 
 function AuthProvider({ children }: Props) {
     const userProfileStorageValue = localStorage.getItem(userProfileStorageKey);
     const [userProfile, setUserProfile] = useState<UserProfile | null>(userProfileStorageValue ? Object.assign(new UserProfile(), JSON.parse(userProfileStorageValue)) : null);
 
-    const login = (values: any,
-        callbackSuccess: (response: AxiosResponse) => any,
-        callbackError: (error: any) => any,
-        callbackFinish: () => any) => {
+    const login = (values: LoginForm,
+        callbackSuccess?: callbackSuccessType,
+        callbackError?: callbackErrorType,
+        callbackFinish?: callbackFinishType) => {
 
-        axios.post('api/login?useCookies=true', {
+        axios.post(config.basePathAPI + 'login?useCookies=true', {
             "email": values.email,
             "password": values.password
         },
@@ -77,8 +69,8 @@ function AuthProvider({ children }: Props) {
             });
     };
 
-    const logout = (callbackSuccess: (response: AxiosResponse) => any) => {
-        axios.post('api/Account/Logout')
+    const logout = (callbackSuccess?: callbackSuccessType) => {
+        axios.post(config.basePathAPI + 'Account/Logout')
             .then(function(response) {
                 if (callbackSuccess !== undefined && callbackSuccess !== null) {
                     callbackSuccess(response);
@@ -86,11 +78,12 @@ function AuthProvider({ children }: Props) {
             });
     };
 
-    const isLogin = (callbackSuccess: (response: AxiosResponse) => any,
-        callbackError: (error: any) => any,
-        callbackFinish: () => any) => {
+    const isLogin = (
+        callbackSuccess?: callbackSuccessType,
+        callbackError?: callbackErrorType,
+        callbackFinish?: callbackFinishType) => {
 
-        axios.get('api/Account/IsLogin')
+        axios.get(config.basePathAPI + 'Account/IsLogin')
             .then(function(response) {
                 if (callbackSuccess !== undefined && callbackSuccess !== null) {
                     callbackSuccess(response);

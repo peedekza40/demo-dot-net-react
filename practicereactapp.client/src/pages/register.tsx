@@ -1,13 +1,14 @@
+import { RegisterView } from 'src/sections/register';
 import { Helmet } from 'react-helmet-async';
 
 export default function Register() {
     return (
         <>
             <Helmet>
-            <title> Login | Minimal UI </title>
+            <title> Register | Minimal UI </title>
             </Helmet>
     
-            {/* <LoginView /> */}
+            <RegisterView />
         </>
     );
 }

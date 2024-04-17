@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
 
@@ -6,7 +7,7 @@ import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
-//import Button from '@mui/material/Button';
+import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
@@ -16,53 +17,42 @@ import { alpha, useTheme } from '@mui/material/styles';
 import InputAdornment from '@mui/material/InputAdornment';
 import Alert from '@mui/material/Alert';
 
-import { useRouter } from 'src/routes/hooks';
-
-import { bgGradient } from 'src/theme/css';
-
 import Logo from 'src/components/logo';
 import Iconify from 'src/components/iconify';
+import { bgGradient } from 'src/theme/css';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, SubmitHandler, FormProvider } from 'react-hook-form';
-import { useAuth } from "src/hooks/use-auth";
-import LoginForm , { loginFormSchema } from "src/models/LoginForm";
 
-// ----------------------------------------------------------------------
-export default function LoginView() {
+import { useRouter } from 'src/routes/hooks';
+import RegisterForm, { registerFormSchema } from "src/models/RegisterForm";
+import { register as registerApi } from "src/apis/services/Accout";
+
+interface IErrorResponse {
+    errors: {
+       code: string;
+       description: string; 
+    }[];
+    succeeded: boolean
+}
+
+export default function RegisterView() {
     const theme = useTheme();
     const router = useRouter();
-    const auth = useAuth();
 
     const [showPassword, setShowPassword] = useState(false);
-    const [isUnauthorize, setIsUnauthorize] = useState(false);
-    const [authorizeMessage, setAuthorizeMessage] = useState("");
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-
-    //check is logged in redirect to landing page
-    const checkUserIsLogin = () => {
-        auth.isLogin(
-            () => {
-                setIsLoggedIn(true);
-                router.push('/');
-            },
-            () => {
-                setIsLoggedIn(false);
-            });
-    }
-
-    useEffect(() => {
-        checkUserIsLogin();
-    }, [isLoggedIn]);
+    const [isHasError, setIsHasError] = useState(false);
+    const [errorResponse, setErrorRerponse] = useState<IErrorResponse | null>(null);
 
     //initial handle form
-    const methods = useForm<LoginForm>({
-        resolver: zodResolver(loginFormSchema),
+    const methods = useForm<RegisterForm>({
+        resolver: zodResolver(registerFormSchema),
     });
 
     const {
-        //reset,
+        reset,
         handleSubmit,
         register,
         formState: { isSubmitSuccessful, errors },
@@ -70,36 +60,24 @@ export default function LoginView() {
 
     useEffect(() => {
         if (isSubmitSuccessful) {
-            //reset();
+            // reset();
         }
     }, [isSubmitSuccessful]);
 
-    const resetStatus = () => {
-        setIsUnauthorize(false);
-        setIsLoggedIn(false);
-    };
-
     //handle submit
-    const onSubmitHandler: SubmitHandler<LoginForm> = (values: LoginForm) => {
+    const onSubmitHandler: SubmitHandler<RegisterForm> = (values: RegisterForm) => {
         setIsLoading(true);
-        auth.login(values,
+        registerApi(values,
             (response: any) => {
                 if (response.status == 200) {
-                    setIsUnauthorize(false);
-                    setIsLoggedIn(true);
-                    router.push('/');
+                    setIsHasError(false);
+                    setErrorRerponse(null);
                 }
             },
             (error: any) => {
-                if (error.response.status == 401) {
-                    setIsUnauthorize(true);
-                    if (error.response.data.detail == "Failed") {
-                        setAuthorizeMessage("Email or password is invalid.");
-                    } else if (error.response.data.detail == "LockedOut") {
-                        setAuthorizeMessage("This user is locked out.");
-                    } else {
-                        setAuthorizeMessage(error.response.data.detail);
-                    }
+                setIsHasError(true);
+                if (error.response.status == 400 && error.response.data.errors.length >= 1) {
+                    setErrorRerponse(error.response.data);
                 }
             },
             () => setIsLoading(false)
@@ -108,10 +86,9 @@ export default function LoginView() {
 
     //handle error
     const renderAlert = () => {
-        if (isUnauthorize) {
-            return (<Alert severity="error" sx={{ my: 3 }}>{authorizeMessage}</Alert>);
-        } else if (isLoggedIn) {
-            return (<Alert severity="success" sx={{ my: 3 }}>Login success.</Alert>);
+        const errorMessage: string = errorResponse != null ? errorResponse?.errors[0]?.description : "Have a someting error. Contact you administator.";
+        if (isHasError) {
+            return (<Alert severity="error" sx={{ my: 3 }}>{errorMessage}</Alert>);
         }
     }
 
@@ -124,14 +101,29 @@ export default function LoginView() {
                 onSubmit={handleSubmit(onSubmitHandler)}
             >
                 {renderAlert()}
-                <Stack spacing={3}>
+                <Stack spacing={3} sx={{ my: 3 }}>
+                    <TextField
+                        label="First name *"
+                        {...register('firstName')}
+                        name="firstName"
+                        error={!!errors.firstName}
+                        helperText={errors.firstName?.message}
+                    />
+
+                    <TextField
+                        label="Last name *"
+                        {...register('lastName')}
+                        name="lastName"
+                        error={!!errors.lastName}
+                        helperText={errors.lastName?.message}
+                    />
+
                     <TextField
                         label="Email address *"
                         {...register('email')}
                         name="email"
                         error={!!errors.email}
                         helperText={errors.email?.message}
-                        onChange={resetStatus}
                     />
 
                     <TextField
@@ -150,14 +142,25 @@ export default function LoginView() {
                         name="password"
                         error={!!errors.password}
                         helperText={errors.password?.message}
-                        onChange={resetStatus}
                     />
-                </Stack>
 
-                <Stack direction="row" alignItems="center" justifyContent="flex-end" sx={{ my: 3 }}>
-                    <Link variant="subtitle2" underline="hover">
-                        Forgot password?
-                    </Link>
+                    <TextField
+                        label="Confirm password *"
+                        type={showConfirmPassword ? 'text' : 'password'}
+                        InputProps={{
+                            endAdornment: (
+                                <InputAdornment position="end">
+                                    <IconButton onClick={() => setShowConfirmPassword(!showConfirmPassword)} edge="end">
+                                        <Iconify icon={showConfirmPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
+                                    </IconButton>
+                                </InputAdornment>
+                            ),
+                        }}
+                        {...register('confirmPassword')}
+                        name="confirmPassword"
+                        error={!!errors.confirmPassword}
+                        helperText={errors.confirmPassword?.message}
+                    />
                 </Stack>
 
                 <LoadingButton
@@ -168,12 +171,12 @@ export default function LoginView() {
                     color="inherit"
                     loading={isLoading}
                 >
-                    Login
+                    Register
                 </LoadingButton>
             </Box>
         </FormProvider>
     );
-
+    
     return (
         <Box
             sx={{
@@ -192,29 +195,17 @@ export default function LoginView() {
                 }}
             />
 
+            {renderAlert()}
             <Stack alignItems="center" justifyContent="center" sx={{ height: 1 }}>
                 <Card
                     sx={{
                         p: 5,
                         width: 1,
-                        maxWidth: 420,
+                        maxWidth: 600,
                     }}
                 >
-                    <Typography variant="h4">Sign in to Minimal</Typography>
-
-                    <Typography variant="body2" sx={{ mt: 2, mb: 5 }}>
-                        Don’t have an account?
-                        <Link variant="subtitle2" sx={{ ml: 0.5 }}
-                            href="/register">
-                            Get started
-                        </Link>
-                    </Typography>
-
-                    <Divider sx={{ my: 3 }}>
-                        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                            OR
-                        </Typography>
-                    </Divider>
+                    <Typography variant="h4">Register for Minimal</Typography>
+                    <Divider sx={{ my: 3 }}></Divider>
 
                     {renderForm}
                 </Card>

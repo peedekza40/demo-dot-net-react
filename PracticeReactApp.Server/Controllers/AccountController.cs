@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using PracticeReactApp.Server.Constants;
 using PracticeReactApp.Server.Data;
 using PracticeReactApp.Server.Models;
+using PracticeReactApp.Server.ViewModels;
 using PracticeReactApp.Server.ViewModels.Account;
 using System.Security.Claims;
 
@@ -52,11 +53,27 @@ namespace PracticeReactApp.Server.Controllers
         }
 
         [HttpPost]
-        [Route("Register")]
-        public IActionResult Register([FromBody] RegisterViewModel model)
+        [AllowAnonymous]
+        [Route("IsExistsEmail")]
+        public IActionResult IsExistsEmail([FromBody] string email)
         {
-            _userManager.CreateAsync(model, model.Password ?? string.Empty);
-            return Ok();
+            var result =  _userManager.FindByEmailAsync(email).Result;
+            return Ok(result != null);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [Route("Register")]
+        public async Task<IActionResult> Register([FromBody] RegisterViewModel model)
+        {
+            model.UserName = model.Email;
+            var result = await _userManager.CreateAsync(model, model.Password ?? string.Empty);
+            if(result.Succeeded == false)
+            {
+                return BadRequest(result);
+            }
+
+            return Ok(result);
         }
 
         [HttpPost]
