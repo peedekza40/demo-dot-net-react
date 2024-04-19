@@ -1,7 +1,7 @@
 import { object, string } from 'zod';
 import UserProfile from "src/models/UserProfile";
 import config from 'src/config.json';
-import { isExistsEmail } from 'src/apis/services/Accout';
+import { isExistsEmail } from '@/apis/services/Account';
 
 export default class RegisterForm extends UserProfile {
     public password: string;

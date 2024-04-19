@@ -4,8 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using PracticeReactApp.Server.Constants;
 using PracticeReactApp.Server.Data;
-using PracticeReactApp.Server.Models;
-using PracticeReactApp.Server.ViewModels;
+using PracticeReactApp.Server.Models.Entities;
 using PracticeReactApp.Server.ViewModels.Account;
 using System.Security.Claims;
 

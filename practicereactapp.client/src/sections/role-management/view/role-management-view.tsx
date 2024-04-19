@@ -1,22 +1,91 @@
-import React from 'react';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import React, { useState } from 'react';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
+import CircularProgress from '@mui/material/CircularProgress';
 import MUIDataTable from "mui-datatables/dist";
 
 import Iconify from 'src/components/iconify';
 
-function RoleManagementView() {
-  const columns = ["Name", "Company", "City", "State"];
+import DataTableActionType from 'src/constants/data-table-action-type';
+import { search as searchApi } from "@/apis/services/RoleManagement";
 
-  const data = [
-  ["Joe James", "Test Corp", "Yonkers", "NY"],
-  ["John Walsh", "Test Corp", "Hartford", "CT"],
-  ["Bob Herm", "Test Corp", "Tampa", "FL"],
-  ["James Houston", "Test Corp", "Dallas", "TX"],
+type DataTableOption = {
+  page: number;
+  count: number; 
+  isLoading: boolean; 
+  rowsPerPage: number; 
+  sortOrder: any
+}
+
+function RoleManagementView() {
+
+  const [dataTableOption, setDataTableOption] = useState<DataTableOption>({
+    page: 0,
+    count: 0,
+    isLoading: false, 
+    rowsPerPage: 0, 
+    sortOrder: {}
+  });
+
+  const [data, setData] = useState([]);
+
+  const columns = [
+    {
+      name: 'Name',
+      label: 'Name',
+      options: {},
+    },
+    {
+      name: 'NormalizedName',
+      label: 'Normalized Name',
+      options: {},
+    },
+    {
+      name: 'Action',
+      label: 'Action',
+      options: {
+        searchable: false,
+        customBodyRender: (value: any, tableMeta: any, updateValue: any) => (
+          <Button 
+            variant="contained" 
+            color="inherit" 
+            startIcon={<Iconify icon="lucide:edit" />}>
+            Edit
+          </Button>
+        )
+      },
+    },
   ];
+
+  const search = (tableState: object) => {
+    const tempOption = dataTableOption;
+    tempOption.isLoading = true;
+    setDataTableOption(tempOption);
+
+    searchApi(tableState,
+      (response: any) => {
+        if(response.data){
+          const tempOption = dataTableOption;
+          tempOption.page = response.data.page;
+          tempOption.count = response.data.count;
+          tempOption.isLoading = false;
+          tempOption.rowsPerPage = response.data.rowsPerPage;
+          tempOption.sortOrder = response.data.sortOrder;
+          setDataTableOption(tempOption);
+          setData(response.data.data);
+        }
+      },
+      (error: any) => {
+        console.log(error);
+      },
+      () => {}
+    );
+  }
 
   const options = {
     filterType: 'checkbox',
@@ -24,14 +93,22 @@ function RoleManagementView() {
     print: false,
     viewColumns: false,
     caseSensitive: true,
-    draggableColumns: {
-      enabled: true
-    },
     responsive: "standard",
     searchAlwaysOpen: true,
     searchPlaceholder: "Search role...",
-    onTableChange: (action: any, tableState: any) => {
-      console.log(action, tableState);
+    serverSide: true,
+    count: dataTableOption?.count,
+    onTableInit: (action: string, tableState: object) => {
+      search(tableState);
+    },
+    onTableChange: (action: string, tableState: object) => {
+      if(action == DataTableActionType.change 
+        || action == DataTableActionType.changePage
+        || action == DataTableActionType.changeRowsPerPage
+        || action == DataTableActionType.filterChange
+        || action == DataTableActionType.search){
+        search(tableState);
+      }
     }
   };
 
@@ -51,6 +128,11 @@ function RoleManagementView() {
           data={data}
           columns={columns}
           options={options}
+          title={
+            <Typography variant="h6">
+              {(dataTableOption.isLoading) && <CircularProgress size={24} style={{ marginLeft: 15, position: 'relative', top: 4 }} />}
+            </Typography>
+          }
         />
       </Card>
     </Container>

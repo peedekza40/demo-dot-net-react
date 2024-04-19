@@ -1,23 +1,32 @@
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using PracticeReactApp.Server.Constants;
-using PracticeReactApp.Server.Data;
+using Newtonsoft.Json;
+using PracticeReactApp.Server.Infrastructures.Extensions;
 using PracticeReactApp.Server.Models;
-using PracticeReactApp.Server.ViewModels;
-using System.Security.Claims;
 
 namespace PracticeReactApp.Server.Controllers
 {
-    [Authorize( Roles = Roles.Admin )]
     [ApiController]
     [Route("[controller]")]
+    [Authorize( Roles = "Admin" )]
     public class RoleManagementController : ControllerBase
     {
-        public IActionResult Search()
+        [HttpPost]
+        [Route("Search")]
+        public IActionResult Search([FromBody] DataTableRequestModel dataTableRequest)
         {
-            return Ok();
+            var result = _roleManager.Roles.ToDataTablesResponse(dataTableRequest);
+            var jsonData = JsonConvert.SerializeObject(result);
+            return Ok(jsonData);
+        }
+
+        private readonly RoleManager<IdentityRole> _roleManager;
+
+        public RoleManagementController(
+            RoleManager<IdentityRole> roleManager)
+        {
+            _roleManager = roleManager;
         }
     }
 }

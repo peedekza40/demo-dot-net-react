@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Npgsql.NameTranslation;
-using PracticeReactApp.Server.Models;
+using PracticeReactApp.Server.Models.Entities;
 
 namespace PracticeReactApp.Server.Data;
 

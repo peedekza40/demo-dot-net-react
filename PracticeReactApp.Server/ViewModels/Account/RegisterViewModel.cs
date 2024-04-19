@@ -1,4 +1,4 @@
-using PracticeReactApp.Server.Models;
+using PracticeReactApp.Server.Models.Entities;
 
 namespace PracticeReactApp.Server.ViewModels.Account
 {

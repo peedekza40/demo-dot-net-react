@@ -26,7 +26,7 @@ import { useForm, SubmitHandler, FormProvider } from 'react-hook-form';
 
 import { useRouter } from 'src/routes/hooks';
 import RegisterForm, { registerFormSchema } from "src/models/RegisterForm";
-import { register as registerApi } from "src/apis/services/Accout";
+import { register as registerApi } from "@/apis/services/Account";
 
 interface IErrorResponse {
     errors: {

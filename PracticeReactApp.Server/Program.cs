@@ -1,9 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
 using PracticeReactApp.Server.Data;
-using PracticeReactApp.Server.Models;
-using Swashbuckle.AspNetCore.Filters;
+using PracticeReactApp.Server.Models.Entities;
 
 var builder = WebApplication.CreateBuilder(args);
 

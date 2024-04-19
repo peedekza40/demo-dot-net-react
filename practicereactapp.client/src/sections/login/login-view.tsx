@@ -91,8 +91,8 @@ export default function LoginView() {
                 }
             },
             (error: any) => {
+                setIsUnauthorize(true);
                 if (error.response.status == 401) {
-                    setIsUnauthorize(true);
                     if (error.response.data.detail == "Failed") {
                         setAuthorizeMessage("Email or password is invalid.");
                     } else if (error.response.data.detail == "LockedOut") {
@@ -100,6 +100,8 @@ export default function LoginView() {
                     } else {
                         setAuthorizeMessage(error.response.data.detail);
                     }
+                } else {
+                    setAuthorizeMessage("Something is invalid. Please contact your administrator.");
                 }
             },
             () => setIsLoading(false)

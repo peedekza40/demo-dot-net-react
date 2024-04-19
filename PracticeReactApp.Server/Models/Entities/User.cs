@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace PracticeReactApp.Server.Models
+namespace PracticeReactApp.Server.Models.Entities
 {
     public partial class User: IdentityUser
     {
