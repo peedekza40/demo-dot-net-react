@@ -41,4 +41,8 @@
     </ProjectReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Infrastructures\Repositories\Interfaces\" />
+  </ItemGroup>
+
 </Project>

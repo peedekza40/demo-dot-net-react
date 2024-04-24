@@ -27,7 +27,7 @@ builder.Services.AddAuthentication(IdentityConstants.ApplicationScheme).AddIdent
 
 builder.Services.AddAuthorizationBuilder();
 
-builder.Services.AddDbContext<PracticeReactContext>(option =>
+builder.Services.AddDbContext<PracticeDotnetReactContext>(option =>
 {
     option.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
@@ -40,7 +40,7 @@ builder.Services.AddIdentityCore<User>(option =>
     option.Password.RequiredLength = 8;
 })
     .AddRoles<IdentityRole>()
-    .AddEntityFrameworkStores<PracticeReactContext>()
+    .AddEntityFrameworkStores<PracticeDotnetReactContext>()
     .AddApiEndpoints();
 
 builder.Services.AddCors(options =>

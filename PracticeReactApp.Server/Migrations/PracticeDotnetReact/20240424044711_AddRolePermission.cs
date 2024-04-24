@@ -3,7 +3,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace PracticeReactApp.Server.Migrations
+namespace PracticeReactApp.Server.Migrations.PracticeDotnetReact
 {
     /// <inheritdoc />
     public partial class AddRolePermission : Migration
@@ -33,25 +33,48 @@ namespace PracticeReactApp.Server.Migrations
                 name: "RoleMenu",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
+                    ID = table.Column<long>(type: "bigint", nullable: false)
                             .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     RoleID = table.Column<string>(type: "text", nullable: false),
                     MenuCode = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_RoleMenu", x => x.Id);
+                    table.PrimaryKey("PK_RoleMenu", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_RoleMenu_Role_RoleId",
+                        column: x => x.RoleID,
+                        principalTable: "Role",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_RoleMenu_Menu_MenuCode",
+                        column: x => x.MenuCode,
+                        principalTable: "Menu",
+                        principalColumn: "Code",
+                        onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "MenuIndex",
+                table: "Menu",
+                column: "Code",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "RoleMenuIndex",
+                table: "RoleMenu",
+                column: "ID");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Menu");
+                name: "RoleMenu");
 
             migrationBuilder.DropTable(
-                name: "RoleMenu");
+                name: "Menu");
         }
     }
 }

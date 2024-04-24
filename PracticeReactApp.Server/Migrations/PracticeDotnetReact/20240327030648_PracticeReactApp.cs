@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace PracticeReactApp.Server.Migrations
+namespace PracticeReactApp.Server.Migrations.PracticeDotnetReact
 {
     /// <inheritdoc />
     public partial class PracticeReactApp : Migration

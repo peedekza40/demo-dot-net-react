@@ -9,11 +9,11 @@ using PracticeReactApp.Server.Data;
 
 #nullable disable
 
-namespace PracticeReactApp.Server.Migrations
+namespace PracticeReactApp.Server.Migrations.PracticeDotnetReact
 {
-    [DbContext(typeof(PracticeReactContext))]
-    [Migration("20240424044711_AddRolePermission")]
-    partial class AddRolePermission
+    [DbContext(typeof(PracticeDotnetReactContext))]
+    [Migration("20240327030648_PracticeReactApp")]
+    partial class PracticeReactApp
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -157,7 +157,7 @@ namespace PracticeReactApp.Server.Migrations
                     b.ToTable("UserToken", (string)null);
                 });
 
-            modelBuilder.Entity("PracticeReactApp.Server.Models.Entities.User", b =>
+            modelBuilder.Entity("PracticeReactApp.Server.Models.User", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("text");
@@ -238,7 +238,7 @@ namespace PracticeReactApp.Server.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("PracticeReactApp.Server.Models.Entities.User", null)
+                    b.HasOne("PracticeReactApp.Server.Models.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -247,7 +247,7 @@ namespace PracticeReactApp.Server.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("PracticeReactApp.Server.Models.Entities.User", null)
+                    b.HasOne("PracticeReactApp.Server.Models.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -262,7 +262,7 @@ namespace PracticeReactApp.Server.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("PracticeReactApp.Server.Models.Entities.User", null)
+                    b.HasOne("PracticeReactApp.Server.Models.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -271,7 +271,7 @@ namespace PracticeReactApp.Server.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("PracticeReactApp.Server.Models.Entities.User", null)
+                    b.HasOne("PracticeReactApp.Server.Models.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)

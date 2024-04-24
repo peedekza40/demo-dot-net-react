@@ -90,12 +90,12 @@ namespace PracticeReactApp.Server.Controllers
             return Ok();
         }
 
-        private readonly PracticeReactContext _context;
+        private readonly AuthorizeDBContext _context;
         private readonly UserManager<User> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
 
         public AccountController(
-            PracticeReactContext context,
+            AuthorizeDBContext context,
             UserManager<User> userManager,
             RoleManager<IdentityRole> roleManager)
         {
