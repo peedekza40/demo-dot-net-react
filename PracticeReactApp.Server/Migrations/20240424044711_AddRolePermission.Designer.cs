@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using PracticeReactApp.Server.Data;
@@ -11,9 +12,11 @@ using PracticeReactApp.Server.Data;
 namespace PracticeReactApp.Server.Migrations
 {
     [DbContext(typeof(PracticeReactContext))]
-    partial class PracticeReactContextModelSnapshot : ModelSnapshot
+    [Migration("20240424044711_AddRolePermission")]
+    partial class AddRolePermission
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -1,6 +1,7 @@
 {
     "version": "0.2.0",
     "configurations": [
+    
         {
             "name": ".NET Core Launch (web)",
             "type": "coreclr",
@@ -34,7 +35,7 @@
             "args": [
                 ""
             ],
-            "preLaunchTask": "Build: PracticeReactApp.Server.csproj",
+            "preLaunchTask": "build",
             "cwd": "${workspaceFolder}/PracticeReactApp.Server",
             "serverReadyAction": {
                 "action": "openExternally",
