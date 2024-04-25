@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using PracticeReactApp.Server.Constants;
 using PracticeReactApp.Server.Infrastructures.Extensions;
 using PracticeReactApp.Server.Models;
 
@@ -9,7 +10,7 @@ namespace PracticeReactApp.Server.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    [Authorize( Roles = "Admin" )]
+    [Authorize( Roles = Roles.Admin )]
     public class RoleManagementController : ControllerBase
     {
         [HttpPost]

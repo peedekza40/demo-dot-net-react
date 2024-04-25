@@ -63,21 +63,19 @@ function RoleManagementView() {
   ];
 
   const search = (tableState: object) => {
-    const tempOption = dataTableOption;
-    tempOption.isLoading = true;
-    setDataTableOption(tempOption);
+    setDataTableOption({...dataTableOption, isLoading: true});
 
     searchApi(tableState,
       (response: any) => {
         if(response.data){
-          const tempOption = dataTableOption;
-          tempOption.page = response.data.page;
-          tempOption.count = response.data.count;
-          tempOption.isLoading = false;
-          tempOption.rowsPerPage = response.data.rowsPerPage;
-          tempOption.sortOrder = response.data.sortOrder;
-          setDataTableOption(tempOption);
           setData(response.data.data);
+          setDataTableOption({
+            page: response.data.page,
+            count: response.data.count,
+            isLoading: false,
+            rowsPerPage: response.data.rowsPerPage,
+            sortOrder: response.data.sortOrder
+          });
         }
       },
       (error: any) => {
