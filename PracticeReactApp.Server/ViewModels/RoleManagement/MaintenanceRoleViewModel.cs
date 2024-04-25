@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using PracticeReactApp.Server.Constants;
 
-namespace PracticeReactApp.Server.ViewModels.Account
+namespace PracticeReactApp.Server.ViewModels.RoleManagement
 {
     public class MaintenanceRoleViewModel: IdentityRole
     {

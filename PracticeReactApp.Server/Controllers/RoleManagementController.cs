@@ -22,6 +22,27 @@ namespace PracticeReactApp.Server.Controllers
             return Ok(jsonData);
         }
 
+        // [HttpPost]
+        // [Route("SaveRole")]
+        // public IActionResult SaveRole([FromBody]MaintenanceRoleViewModel model)
+        // {
+        //     var saveModel = new IdentityRole(model.Name ?? string.Empty);
+        //     if (model.Mode == ActionMode.Add)
+        //     {
+        //         _roleManager.CreateAsync(saveModel).Wait();
+        //     }
+        //     else
+        //     {
+        //         saveModel = _roleManager.Roles.FirstOrDefault(r => r.Id == model.Id);
+        //         if (saveModel != null)
+        //         {
+        //             _roleManager.UpdateAsync(saveModel).Wait();
+        //         }
+        //     }
+
+        //     return Ok();
+        // }
+
         private readonly RoleManager<IdentityRole> _roleManager;
 
         public RoleManagementController(

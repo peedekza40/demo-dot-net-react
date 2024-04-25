@@ -6,13 +6,13 @@ using PracticeReactApp.Server.Models.Entities;
 
 namespace PracticeReactApp.Server.Data;
 
-public partial class PracticeReactContext : IdentityDbContext<User>
+public partial class AuthorizeDBContext : IdentityDbContext<User>
 {
-    public PracticeReactContext()
+    public AuthorizeDBContext()
     {
     }
 
-    public PracticeReactContext(DbContextOptions<PracticeReactContext> options)
+    public AuthorizeDBContext(DbContextOptions<PracticeDotnetReactContext> options)
         : base(options)
     {
     }

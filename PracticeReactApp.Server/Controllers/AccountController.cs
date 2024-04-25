@@ -71,6 +71,13 @@ namespace PracticeReactApp.Server.Controllers
             {
                 return BadRequest(result);
             }
+            
+            var user = _userManager.Users.FirstOrDefault(x => x.UserName == model.UserName);
+            var resultAddRole = await _userManager.AddToRoleAsync(user, Roles.User);
+            if(resultAddRole.Succeeded == false)
+            {
+                return BadRequest(resultAddRole);
+            }
 
             return Ok(result);
         }
@@ -83,52 +90,12 @@ namespace PracticeReactApp.Server.Controllers
             return Ok();
         }
 
-        [HttpPost]
-        [AllowAnonymous]
-        [Route("SaveRole")]
-        public IActionResult SaveRole([FromBody]MaintenanceRoleViewModel model)
-        {
-            var saveModel = new IdentityRole(model.Name ?? string.Empty);
-            if (model.Mode == ActionMode.Add)
-            {
-                _roleManager.CreateAsync(saveModel).Wait();
-            }
-            else
-            {
-                saveModel = _roleManager.Roles.FirstOrDefault(r => r.Id == model.Id);
-                if (saveModel != null)
-                {
-                    _roleManager.UpdateAsync(saveModel).Wait();
-                }
-            }
-
-            return Ok();
-        }
-
-        [HttpPost]
-        [Route("SetupRole")]
-        public async Task<IActionResult> SetupRole()
-        {
-            var adminRole = await _roleManager.FindByNameAsync("Admin");
-            if (adminRole == null)
-            {
-                adminRole = new IdentityRole("Admin");
-                await _roleManager.CreateAsync(adminRole);
-
-                await _roleManager.AddClaimAsync(adminRole, new Claim(CustomClaimTypes.Permission, "projects.view"));
-                await _roleManager.AddClaimAsync(adminRole, new Claim(CustomClaimTypes.Permission, "projects.create"));
-                await _roleManager.AddClaimAsync(adminRole, new Claim(CustomClaimTypes.Permission, "projects.update"));
-            }
-
-            return Ok();
-        }
-
-        private readonly PracticeReactContext _context;
+        private readonly AuthorizeDBContext _context;
         private readonly UserManager<User> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
 
         public AccountController(
-            PracticeReactContext context,
+            AuthorizeDBContext context,
             UserManager<User> userManager,
             RoleManager<IdentityRole> roleManager)
         {
