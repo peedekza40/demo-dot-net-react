@@ -8,7 +8,7 @@ using PracticeReactApp.Server.Data;
 
 #nullable disable
 
-namespace PracticeReactApp.Server.Migrations.PracticeDotnetReact
+namespace PracticeReactApp.Server.Migrations
 {
     [DbContext(typeof(PracticeDotnetReactContext))]
     partial class PracticeDotnetReactContextModelSnapshot : ModelSnapshot
@@ -21,32 +21,6 @@ namespace PracticeReactApp.Server.Migrations.PracticeDotnetReact
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("text");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
-
-                    b.Property<string>("NormalizedName")
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedName")
-                        .IsUnique()
-                        .HasDatabaseName("RoleNameIndex");
-
-                    b.ToTable("Role", (string)null);
-                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
@@ -133,6 +107,13 @@ namespace PracticeReactApp.Server.Migrations.PracticeDotnetReact
                     b.HasIndex("RoleId");
 
                     b.ToTable("UserRole", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = "000000",
+                            RoleId = "ADMIN"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -154,6 +135,31 @@ namespace PracticeReactApp.Server.Migrations.PracticeDotnetReact
                     b.ToTable("UserToken", (string)null);
                 });
 
+            modelBuilder.Entity("PracticeReactApp.Server.Models.Entities.Apiendpoint", b =>
+                {
+                    b.Property<string>("Code")
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<string>("Path")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.HasKey("Code");
+
+                    b.HasIndex(new[] { "Code" }, "APIEndpointIndex")
+                        .IsUnique();
+
+                    b.ToTable("APIEndpoint", (string)null);
+                });
+
             modelBuilder.Entity("PracticeReactApp.Server.Models.Entities.Menu", b =>
                 {
                     b.Property<string>("Code")
@@ -169,6 +175,9 @@ namespace PracticeReactApp.Server.Migrations.PracticeDotnetReact
                         .HasColumnType("character varying(256)");
 
                     b.Property<bool?>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool?>("IsDisplay")
                         .HasColumnType("boolean");
 
                     b.Property<string>("Name")
@@ -188,14 +197,83 @@ namespace PracticeReactApp.Server.Migrations.PracticeDotnetReact
 
                     b.HasKey("Code");
 
+                    b.HasIndex(new[] { "Code" }, "MenuIndex")
+                        .IsUnique();
+
                     b.ToTable("Menu", (string)null);
+                });
+
+            modelBuilder.Entity("PracticeReactApp.Server.Models.Entities.Role", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<string>("NormalizedName")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasDatabaseName("RoleNameIndex");
+
+                    b.ToTable("Role", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "ADMIN",
+                            Name = "Admin",
+                            NormalizedName = "ADMIN"
+                        });
+                });
+
+            modelBuilder.Entity("PracticeReactApp.Server.Models.Entities.RoleApiendpoint", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasColumnName("ID");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("Apicode")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("APICode");
+
+                    b.Property<string>("RoleId")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("RoleID");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Apicode");
+
+                    b.HasIndex("RoleId");
+
+                    b.HasIndex(new[] { "Id" }, "RoleAPIEndpointIndex");
+
+                    b.ToTable("RoleAPIEndpoint", (string)null);
                 });
 
             modelBuilder.Entity("PracticeReactApp.Server.Models.Entities.RoleMenu", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("ID");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
@@ -210,6 +288,12 @@ namespace PracticeReactApp.Server.Migrations.PracticeDotnetReact
                         .HasColumnName("RoleID");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("MenuCode");
+
+                    b.HasIndex("RoleId");
+
+                    b.HasIndex(new[] { "Id" }, "RoleMenuIndex");
 
                     b.ToTable("RoleMenu", (string)null);
                 });
@@ -282,11 +366,31 @@ namespace PracticeReactApp.Server.Migrations.PracticeDotnetReact
                         .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("User", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "000000",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "0b39a618-6fd9-4d6a-86ea-a2ef96305bdf",
+                            Email = "sysadmin@gmail.com",
+                            EmailConfirmed = false,
+                            FirstName = "Admin",
+                            LastName = ".A",
+                            LockoutEnabled = false,
+                            NormalizedEmail = "SYSADMIN@GMAIL.COM",
+                            NormalizedUserName = "SYSADMIN@GMAIL.COM",
+                            PasswordHash = "AQAAAAIAAYagAAAAEPv9/zAx1cchleh9OoCJ626OM8Z+nzSSr13yUa/lru/kAdACgtIPSD4o74IwwS2jKQ==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "10cd2844-ecc0-4355-b6ba-5d9752281cc5",
+                            TwoFactorEnabled = false,
+                            UserName = "sysadmin@gmail.com"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                    b.HasOne("PracticeReactApp.Server.Models.Entities.Role", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -313,7 +417,7 @@ namespace PracticeReactApp.Server.Migrations.PracticeDotnetReact
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                    b.HasOne("PracticeReactApp.Server.Models.Entities.Role", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -333,6 +437,63 @@ namespace PracticeReactApp.Server.Migrations.PracticeDotnetReact
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("PracticeReactApp.Server.Models.Entities.RoleApiendpoint", b =>
+                {
+                    b.HasOne("PracticeReactApp.Server.Models.Entities.Apiendpoint", "ApicodeNavigation")
+                        .WithMany("RoleApiendpoints")
+                        .HasForeignKey("Apicode")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PracticeReactApp.Server.Models.Entities.Role", "Role")
+                        .WithMany("RoleApiendpoints")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_RoleAPIEndpoint_Role_RoleId");
+
+                    b.Navigation("ApicodeNavigation");
+
+                    b.Navigation("Role");
+                });
+
+            modelBuilder.Entity("PracticeReactApp.Server.Models.Entities.RoleMenu", b =>
+                {
+                    b.HasOne("PracticeReactApp.Server.Models.Entities.Menu", "MenuCodeNavigation")
+                        .WithMany("RoleMenus")
+                        .HasForeignKey("MenuCode")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PracticeReactApp.Server.Models.Entities.Role", "Role")
+                        .WithMany("RoleMenus")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_RoleMenu_Role_RoleId");
+
+                    b.Navigation("MenuCodeNavigation");
+
+                    b.Navigation("Role");
+                });
+
+            modelBuilder.Entity("PracticeReactApp.Server.Models.Entities.Apiendpoint", b =>
+                {
+                    b.Navigation("RoleApiendpoints");
+                });
+
+            modelBuilder.Entity("PracticeReactApp.Server.Models.Entities.Menu", b =>
+                {
+                    b.Navigation("RoleMenus");
+                });
+
+            modelBuilder.Entity("PracticeReactApp.Server.Models.Entities.Role", b =>
+                {
+                    b.Navigation("RoleApiendpoints");
+
+                    b.Navigation("RoleMenus");
                 });
 #pragma warning restore 612, 618
         }

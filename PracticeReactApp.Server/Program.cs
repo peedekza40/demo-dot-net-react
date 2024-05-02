@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using PracticeReactApp.Server;
 using PracticeReactApp.Server.Data;
 using PracticeReactApp.Server.Models.Entities;
 
@@ -39,7 +40,7 @@ builder.Services.AddIdentityCore<User>(option =>
     option.Password.RequireUppercase = false;
     option.Password.RequiredLength = 8;
 })
-    .AddRoles<IdentityRole>()
+    .AddRoles<Role>()
     .AddEntityFrameworkStores<PracticeDotnetReactContext>()
     .AddApiEndpoints();
 
@@ -64,7 +65,10 @@ builder.Services.AddCors(options =>
 //})
 //    .AddEntityFrameworkStores<PracticeReactContext>();
 
+builder.Services.AddHttpContextAccessor();
+
 //add service to the container
+Services.ConfigureServices(builder.Services);
 
 var app = builder.Build();
 

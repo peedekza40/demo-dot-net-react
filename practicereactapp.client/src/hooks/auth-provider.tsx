@@ -27,6 +27,7 @@ interface IAuthContextValue {
         callbackError?: callbackErrorType,
         callbackFinish?: callbackFinishType
     ): void,
+    updateState(): void,
     userProfile: UserProfile | null
 }
 
@@ -37,6 +38,17 @@ export const AuthContext = createContext<IAuthContextValue>(null!);
 function AuthProvider({ children }: Props) {
     const userProfileStorageValue = localStorage.getItem(userProfileStorageKey);
     const [userProfile, setUserProfile] = useState<UserProfile | null>(userProfileStorageValue ? Object.assign(new UserProfile(), JSON.parse(userProfileStorageValue)) : null);
+    
+
+    const getUserProfile = () => {
+        if (!userProfileStorageValue) {
+            axios.get('api/Account/GetCurrentUserProfile')
+            .then(function (response) {
+                localStorage.setItem(userProfileStorageKey, JSON.stringify(response.data));
+                setUserProfile(Object.assign(new UserProfile(), response.data));
+            });
+        }
+    };
 
     const login = (values: LoginForm,
         callbackSuccess?: callbackSuccessType,
@@ -102,17 +114,12 @@ function AuthProvider({ children }: Props) {
             });
     };
 
-    //get user profile
-    if (!userProfileStorageValue) {
-        axios.get('api/Account/GetCurrentUserProfile')
-            .then(function (response) {
-                localStorage.setItem(userProfileStorageKey, JSON.stringify(response.data));
-                setUserProfile(Object.assign(new UserProfile(), response.data));
-            });
-    }
+    const updateState = () => {
+        getUserProfile();
+    };
 
     return (
-        <AuthContext.Provider value={{ login, logout, isLogin, userProfile }}>
+        <AuthContext.Provider value={{ login, logout, isLogin, updateState, userProfile }}>
             {children}
         </AuthContext.Provider>
     );

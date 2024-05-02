@@ -3,21 +3,23 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using PracticeReactApp.Server.Constants;
+using PracticeReactApp.Server.Filters;
 using PracticeReactApp.Server.Infrastructures.Extensions;
 using PracticeReactApp.Server.Models;
+using PracticeReactApp.Server.Models.Entities;
 
 namespace PracticeReactApp.Server.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    [Authorize( Roles = Roles.Admin )]
+    [AuthorizeForbidden]
     public class RoleManagementController : ControllerBase
     {
         [HttpPost]
         [Route("Search")]
         public IActionResult Search([FromBody] DataTableRequestModel dataTableRequest)
         {
-            var result = _roleManager.Roles.ToDataTablesResponse(dataTableRequest);
+            var result = roleManager.Roles.ToDataTablesResponse(dataTableRequest);
             var jsonData = JsonConvert.SerializeObject(result);
             return Ok(jsonData);
         }
@@ -43,12 +45,12 @@ namespace PracticeReactApp.Server.Controllers
         //     return Ok();
         // }
 
-        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly RoleManager<Role> roleManager;
 
         public RoleManagementController(
-            RoleManager<IdentityRole> roleManager)
+            RoleManager<Role> roleManager)
         {
-            _roleManager = roleManager;
+            this.roleManager = roleManager;
         }
     }
 }

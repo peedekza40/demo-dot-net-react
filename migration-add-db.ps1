@@ -1,0 +1,1 @@
+dotnet ef migrations add InitialDB --context PracticeDotnetReactContext --project PracticeReactApp.Server

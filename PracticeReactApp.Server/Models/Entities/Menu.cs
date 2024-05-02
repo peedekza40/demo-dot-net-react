@@ -19,5 +19,9 @@ public partial class Menu
 
     public int? Order { get; set; }
 
+    public bool? IsDisplay { get; set; }
+
     public bool? IsActive { get; set; }
+
+    public virtual ICollection<RoleMenu> RoleMenus { get; set; } = new List<RoleMenu>();
 }

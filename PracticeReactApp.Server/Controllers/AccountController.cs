@@ -3,31 +3,22 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using PracticeReactApp.Server.Constants;
-using PracticeReactApp.Server.Data;
+using PracticeReactApp.Server.Filters;
 using PracticeReactApp.Server.Models.Entities;
 using PracticeReactApp.Server.ViewModels.Account;
-using System.Security.Claims;
 
 namespace PracticeReactApp.Server.Controllers
 {
-    [Authorize]
     [ApiController]
     [Route("[controller]")]
+    [AuthorizeForbidden( Path = "Account" )]
     public class AccountController : ControllerBase
     {
-        [HttpGet]
-        [Route("GetAllUsers")]
-        public IActionResult GetAllUsers()
-        {
-            var users = _context.Users.ToList();
-            return Ok(users);
-        }
-
         [HttpGet]
         [Route("GetCurrentUserProfile")]
         public IActionResult GetCurrentUserProfile()
         {
-            var currentUser = _userManager.GetUserAsync(User).Result;
+            var currentUser = userManager.GetUserAsync(User).Result;
             return Ok(new 
             {
                 UserName = currentUser?.UserName,
@@ -39,6 +30,7 @@ namespace PracticeReactApp.Server.Controllers
 
         [HttpGet]
         [Route("IsLogin")]
+        // [AuthorizeForbidden( Path = "Account/IsLogin" )]
         public IActionResult IsLogin()
         {
             return Ok(true);
@@ -56,7 +48,7 @@ namespace PracticeReactApp.Server.Controllers
         [Route("IsExistsEmail")]
         public IActionResult IsExistsEmail([FromBody] string email)
         {
-            var result =  _userManager.FindByEmailAsync(email).Result;
+            var result =  userManager.FindByEmailAsync(email).Result;
             return Ok(result != null);
         }
 
@@ -66,14 +58,14 @@ namespace PracticeReactApp.Server.Controllers
         public async Task<IActionResult> Register([FromBody] RegisterViewModel model)
         {
             model.UserName = model.Email;
-            var result = await _userManager.CreateAsync(model, model.Password ?? string.Empty);
+            var result = await userManager.CreateAsync(model, model.Password ?? string.Empty);
             if(result.Succeeded == false)
             {
                 return BadRequest(result);
             }
             
-            var user = _userManager.Users.FirstOrDefault(x => x.UserName == model.UserName);
-            var resultAddRole = await _userManager.AddToRoleAsync(user, Roles.User);
+            var user = userManager.Users.FirstOrDefault(x => x.UserName == model.UserName);
+            var resultAddRole = await userManager.AddToRoleAsync(user, Roles.User);
             if(resultAddRole.Succeeded == false)
             {
                 return BadRequest(resultAddRole);
@@ -90,18 +82,15 @@ namespace PracticeReactApp.Server.Controllers
             return Ok();
         }
 
-        private readonly AuthorizeDBContext _context;
-        private readonly UserManager<User> _userManager;
-        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly UserManager<User> userManager;
+        private readonly RoleManager<Role> roleManager;
 
         public AccountController(
-            AuthorizeDBContext context,
             UserManager<User> userManager,
-            RoleManager<IdentityRole> roleManager)
+            RoleManager<Role> roleManager)
         {
-            _context = context;
-            _userManager = userManager;
-            _roleManager = roleManager;
+            this.userManager = userManager;
+            this.roleManager = roleManager;
         }
     }
 }

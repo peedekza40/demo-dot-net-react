@@ -11,26 +11,31 @@ const navConfig = [
     title: 'dashboard',
     path: '/',
     icon: icon('ic_analytics'),
+    isDisplay: true
   },
   {
     title: 'user',
     path: '/user',
     icon: icon('ic_user'),
+    isDisplay: true
   },
 {
     title: 'role',
     path: '/role',
     icon: icon('ic_user'),
+    isDisplay: true
 },
   {
     title: 'product',
     path: '/products',
     icon: icon('ic_cart'),
+    isDisplay: true
   },
   {
     title: 'blog',
     path: '/blog',
     icon: icon('ic_blog'),
+    isDisplay: true
   },
 ];
 

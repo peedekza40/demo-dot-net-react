@@ -4,14 +4,47 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace PracticeReactApp.Server.Migrations.PracticeDotnetReact
+namespace PracticeReactApp.Server.Migrations
 {
     /// <inheritdoc />
-    public partial class PracticeReactApp : Migration
+    public partial class InitialDB : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "APIEndpoint",
+                columns: table => new
+                {
+                    Code = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                    Name = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    Path = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    IsActive = table.Column<bool>(type: "boolean", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_APIEndpoint", x => x.Code);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Menu",
+                columns: table => new
+                {
+                    Code = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                    Name = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    Path = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    Attribute = table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: true),
+                    Icon = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    ParentCode = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
+                    Order = table.Column<int>(type: "integer", nullable: true),
+                    IsDisplay = table.Column<bool>(type: "boolean", nullable: true),
+                    IsActive = table.Column<bool>(type: "boolean", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Menu", x => x.Code);
+                });
+
             migrationBuilder.CreateTable(
                 name: "Role",
                 columns: table => new
@@ -54,6 +87,32 @@ namespace PracticeReactApp.Server.Migrations.PracticeDotnetReact
                 });
 
             migrationBuilder.CreateTable(
+                name: "RoleAPIEndpoint",
+                columns: table => new
+                {
+                    ID = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    RoleID = table.Column<string>(type: "text", nullable: false),
+                    APICode = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RoleAPIEndpoint", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_RoleAPIEndpoint_APIEndpoint_APICode",
+                        column: x => x.APICode,
+                        principalTable: "APIEndpoint",
+                        principalColumn: "Code",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_RoleAPIEndpoint_Role_RoleId",
+                        column: x => x.RoleID,
+                        principalTable: "Role",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "RoleClaim",
                 columns: table => new
                 {
@@ -69,6 +128,32 @@ namespace PracticeReactApp.Server.Migrations.PracticeDotnetReact
                     table.ForeignKey(
                         name: "FK_RoleClaim_Role_RoleId",
                         column: x => x.RoleId,
+                        principalTable: "Role",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RoleMenu",
+                columns: table => new
+                {
+                    ID = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    RoleID = table.Column<string>(type: "text", nullable: false),
+                    MenuCode = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RoleMenu", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_RoleMenu_Menu_MenuCode",
+                        column: x => x.MenuCode,
+                        principalTable: "Menu",
+                        principalColumn: "Code",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_RoleMenu_Role_RoleId",
+                        column: x => x.RoleID,
                         principalTable: "Role",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -159,6 +244,33 @@ namespace PracticeReactApp.Server.Migrations.PracticeDotnetReact
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.InsertData(
+                table: "Role",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+                values: new object[] { "ADMIN", null, "Admin", "ADMIN" });
+
+            migrationBuilder.InsertData(
+                table: "User",
+                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
+                values: new object[] { "000000", 0, "0b39a618-6fd9-4d6a-86ea-a2ef96305bdf", "sysadmin@gmail.com", false, "Admin", ".A", false, null, "SYSADMIN@GMAIL.COM", "SYSADMIN@GMAIL.COM", "AQAAAAIAAYagAAAAEPv9/zAx1cchleh9OoCJ626OM8Z+nzSSr13yUa/lru/kAdACgtIPSD4o74IwwS2jKQ==", null, false, "10cd2844-ecc0-4355-b6ba-5d9752281cc5", false, "sysadmin@gmail.com" });
+
+            migrationBuilder.InsertData(
+                table: "UserRole",
+                columns: new[] { "RoleId", "UserId" },
+                values: new object[] { "ADMIN", "000000" });
+
+            migrationBuilder.CreateIndex(
+                name: "APIEndpointIndex",
+                table: "APIEndpoint",
+                column: "Code",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "MenuIndex",
+                table: "Menu",
+                column: "Code",
+                unique: true);
+
             migrationBuilder.CreateIndex(
                 name: "RoleNameIndex",
                 table: "Role",
@@ -166,9 +278,39 @@ namespace PracticeReactApp.Server.Migrations.PracticeDotnetReact
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_RoleAPIEndpoint_APICode",
+                table: "RoleAPIEndpoint",
+                column: "APICode");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RoleAPIEndpoint_RoleID",
+                table: "RoleAPIEndpoint",
+                column: "RoleID");
+
+            migrationBuilder.CreateIndex(
+                name: "RoleAPIEndpointIndex",
+                table: "RoleAPIEndpoint",
+                column: "ID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_RoleClaim_RoleId",
                 table: "RoleClaim",
                 column: "RoleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RoleMenu_MenuCode",
+                table: "RoleMenu",
+                column: "MenuCode");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RoleMenu_RoleID",
+                table: "RoleMenu",
+                column: "RoleID");
+
+            migrationBuilder.CreateIndex(
+                name: "RoleMenuIndex",
+                table: "RoleMenu",
+                column: "ID");
 
             migrationBuilder.CreateIndex(
                 name: "EmailIndex",
@@ -201,7 +343,13 @@ namespace PracticeReactApp.Server.Migrations.PracticeDotnetReact
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "RoleAPIEndpoint");
+
+            migrationBuilder.DropTable(
                 name: "RoleClaim");
+
+            migrationBuilder.DropTable(
+                name: "RoleMenu");
 
             migrationBuilder.DropTable(
                 name: "UserClaim");
@@ -214,6 +362,12 @@ namespace PracticeReactApp.Server.Migrations.PracticeDotnetReact
 
             migrationBuilder.DropTable(
                 name: "UserToken");
+
+            migrationBuilder.DropTable(
+                name: "APIEndpoint");
+
+            migrationBuilder.DropTable(
+                name: "Menu");
 
             migrationBuilder.DropTable(
                 name: "Role");
