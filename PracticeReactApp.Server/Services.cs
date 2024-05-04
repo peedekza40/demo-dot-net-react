@@ -1,7 +1,7 @@
-using PracticeReactApp.Server.Infrastructures.Repositories;
-using PracticeReactApp.Server.Infrastructures.Repositories.Interfaces;
-using PracticeReactApp.Server.Infrastructures.Services;
-using PracticeReactApp.Server.Infrastructures.Services.Interfaces;
+using PracticeReactApp.Infrastructures.Repositories;
+using PracticeReactApp.Infrastructures.Repositories.Interfaces;
+using PracticeReactApp.Infrastructures.Services;
+using PracticeReactApp.Infrastructures.Services.Interfaces;
 
 namespace PracticeReactApp.Server
 {

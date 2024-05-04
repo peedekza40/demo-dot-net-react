@@ -2,12 +2,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
-
+import { useForm, SubmitHandler, FormProvider } from 'react-hook-form';
 import Box from '@mui/material/Box';
-import Link from '@mui/material/Link';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
-import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
@@ -15,26 +13,18 @@ import IconButton from '@mui/material/IconButton';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { alpha, useTheme } from '@mui/material/styles';
 import InputAdornment from '@mui/material/InputAdornment';
-import Alert from '@mui/material/Alert';
 
 import Logo from 'src/components/logo';
 import Iconify from 'src/components/iconify';
+import ErrorAlert from 'src/components/error-alert';
 import { bgGradient } from 'src/theme/css';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm, SubmitHandler, FormProvider } from 'react-hook-form';
 
 import { useRouter } from 'src/routes/hooks';
 import RegisterForm, { registerFormSchema } from "src/models/RegisterForm";
 import { register as registerApi } from "@/apis/services/Account";
-
-interface IErrorResponse {
-    errors: {
-       code: string;
-       description: string; 
-    }[];
-    succeeded: boolean
-}
+import { ErrorResponse } from "src/utils/global-type";
 
 export default function RegisterView() {
     const theme = useTheme();
@@ -44,7 +34,7 @@ export default function RegisterView() {
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [isHasError, setIsHasError] = useState(false);
-    const [errorResponse, setErrorRerponse] = useState<IErrorResponse | null>(null);
+    const [errorResponse, setErrorRerponse] = useState<ErrorResponse | null>(null);
 
     //initial handle form
     const methods = useForm<RegisterForm>({
@@ -72,6 +62,7 @@ export default function RegisterView() {
                 if (response.status == 200) {
                     setIsHasError(false);
                     setErrorRerponse(null);
+                    router.push("/");
                 }
             },
             (error: any) => {
@@ -84,14 +75,6 @@ export default function RegisterView() {
         );
     };
 
-    //handle error
-    const renderAlert = () => {
-        const errorMessage: string = errorResponse != null ? errorResponse?.errors[0]?.description : "Have a someting error. Contact you administator.";
-        if (isHasError) {
-            return (<Alert severity="error" sx={{ my: 3 }}>{errorMessage}</Alert>);
-        }
-    }
-
     const renderForm = (
         <FormProvider {...methods}>
             <Box
@@ -100,7 +83,9 @@ export default function RegisterView() {
                 autoComplete='off'
                 onSubmit={handleSubmit(onSubmitHandler)}
             >
-                {renderAlert()}
+                <ErrorAlert 
+                    isHasError={isHasError} 
+                    errorResponse={errorResponse}/>
                 <Stack spacing={3} sx={{ my: 3 }}>
                     <TextField
                         label="First name *"
@@ -195,7 +180,6 @@ export default function RegisterView() {
                 }}
             />
 
-            {renderAlert()}
             <Stack alignItems="center" justifyContent="center" sx={{ height: 1 }}>
                 <Card
                     sx={{

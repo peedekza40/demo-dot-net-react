@@ -39,5 +39,4 @@ export async function isExistsEmail(email: string): Promise<{ data: boolean }> {
     };
 
     return axios.post(config.basePathAPI + 'Account/IsExistsEmail', email, configRequest);
-    
 }

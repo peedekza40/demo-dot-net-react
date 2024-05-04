@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using PracticeReactApp.Server.Infrastructures.Services.Interfaces;
+using PracticeReactApp.Infrastructures.Services.Interfaces;
 
 namespace PracticeReactApp.Server.Filters
 {
@@ -18,17 +18,22 @@ namespace PracticeReactApp.Server.Filters
                 return;
 
             var accountService = context.HttpContext.RequestServices.GetService<IAccountService>();
-            if(accountService.GetCurrentUser() == null)
+            if(accountService?.GetCurrentUser() == null)
             {
                 // not logged in
                 context.Result = new UnauthorizedObjectResult("Unauthorized");
                 return;
             }
 
-            if(accountService.CurrentUserIsHavePermissionEndpoint(context.HttpContext, Path) == false)
+            if(accountService.CurrentUserIsHavePermissionEndpoint(Path) == false)
             {
                 // role not have permission
-                context.Result = new ForbidResult("Forbidden");
+                context.Result = new ContentResult()
+                {
+                    StatusCode = 403,
+                    Content = "Forbidden",
+                    ContentType = "text/plain"
+                };
                 return;
             }
         }

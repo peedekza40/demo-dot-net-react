@@ -9,7 +9,8 @@ export default class RegisterForm extends UserProfile {
 }
 
 export const registerFormSchema: any = object({
-    email: string().nonempty("Email is required")
+    email: string()
+        .nonempty("Email is required")
         .email('Email must be a valid email address')
         .refine(async (value) => {
             try {

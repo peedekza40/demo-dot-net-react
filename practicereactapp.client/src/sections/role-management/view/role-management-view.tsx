@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
@@ -11,7 +11,9 @@ import MUIDataTable from "mui-datatables/dist";
 
 import Iconify from 'src/components/iconify';
 
+import ActionMode from 'src/constants/action-mode';
 import DataTableActionType from 'src/constants/data-table-action-type';
+import FormRoleDialog from 'src/sections/role-management/form-role-dialog';
 import { search as searchApi } from "@/apis/services/RoleManagement";
 
 type DataTableOption = {
@@ -33,8 +35,20 @@ function RoleManagementView() {
   });
 
   const [data, setData] = useState([]);
+  const [formRoleIsOpen, setFormRoleIsOpen] = useState<boolean>(false);
+  const [formRoleActionMode, setFormRoleActionMode] = useState<ActionMode>(ActionMode.Add);
+
+  const handleOpenFormRole = (actionMode: ActionMode) => {
+    setFormRoleIsOpen(true);
+    setFormRoleActionMode(actionMode);
+  };
 
   const columns = [
+    {
+      name: 'Id',
+      label: 'ID',
+      options: {},
+    },
     {
       name: 'Name',
       label: 'Name',
@@ -54,7 +68,8 @@ function RoleManagementView() {
           <Button 
             variant="contained" 
             color="inherit" 
-            startIcon={<Iconify icon="lucide:edit" />}>
+            startIcon={<Iconify icon="lucide:edit" />}
+            onClick={() => handleOpenFormRole(ActionMode.Edit)}>
             Edit
           </Button>
         )
@@ -115,7 +130,11 @@ function RoleManagementView() {
       <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
         <Typography variant="h4">Roles</Typography>
 
-        <Button variant="contained" color="inherit" startIcon={<Iconify icon="eva:plus-fill" />}>
+        <Button 
+          variant="contained" 
+          color="inherit" 
+          startIcon={<Iconify icon="eva:plus-fill" />}
+          onClick={() => handleOpenFormRole(ActionMode.Add)}>
           New Role
         </Button>
       </Stack>
@@ -133,6 +152,11 @@ function RoleManagementView() {
           }
         />
       </Card>
+
+      <FormRoleDialog
+        actionMode={formRoleActionMode}
+        isOpen={formRoleIsOpen}
+        onClose={() => setFormRoleIsOpen(false)}/>
     </Container>
   );
 }

@@ -1,1 +1,1 @@
-dotnet ef database update --context PracticeDotnetReactContext --project PracticeReactApp.Server
+dotnet ef database update --context PracticeDotnetReactContext --project PracticeReactApp.Migrations --startup-project PracticeReactApp.Server

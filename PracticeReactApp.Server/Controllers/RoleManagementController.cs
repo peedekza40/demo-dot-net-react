@@ -1,56 +1,61 @@
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using PracticeReactApp.Server.Constants;
+using PracticeReactApp.Core.Constants;
+using PracticeReactApp.Core.Data.Entities;
+using PracticeReactApp.Core.Models;
+using PracticeReactApp.Infrastructures.Repositories.Interfaces;
 using PracticeReactApp.Server.Filters;
-using PracticeReactApp.Server.Infrastructures.Extensions;
-using PracticeReactApp.Server.Models;
-using PracticeReactApp.Server.Models.Entities;
+using PracticeReactApp.Server.ViewModels.RoleManagement;
 
 namespace PracticeReactApp.Server.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    [AuthorizeForbidden]
+    [AuthorizeForbidden(Path = "RoleManagement")]
     public class RoleManagementController : ControllerBase
     {
         [HttpPost]
         [Route("Search")]
         public IActionResult Search([FromBody] DataTableRequestModel dataTableRequest)
         {
-            var result = roleManager.Roles.ToDataTablesResponse(dataTableRequest);
+            var result = roleRepository.GetDataTableResponse(dataTableRequest);
             var jsonData = JsonConvert.SerializeObject(result);
             return Ok(jsonData);
         }
 
-        // [HttpPost]
-        // [Route("SaveRole")]
-        // public IActionResult SaveRole([FromBody]MaintenanceRoleViewModel model)
-        // {
-        //     var saveModel = new IdentityRole(model.Name ?? string.Empty);
-        //     if (model.Mode == ActionMode.Add)
-        //     {
-        //         _roleManager.CreateAsync(saveModel).Wait();
-        //     }
-        //     else
-        //     {
-        //         saveModel = _roleManager.Roles.FirstOrDefault(r => r.Id == model.Id);
-        //         if (saveModel != null)
-        //         {
-        //             _roleManager.UpdateAsync(saveModel).Wait();
-        //         }
-        //     }
+        [HttpPost]
+        [Route("IsExists")]
+        public IActionResult IsExists([FromBody] string id)
+        {
+            return Ok(roleRepository.IsExists(id));
+        }
 
-        //     return Ok();
-        // }
+        [HttpPost]
+        [Route("SaveRole")]
+        public IActionResult SaveRole([FromBody] MaintenanceRoleViewModel model)
+        {
+            if (ActionMode.Add == model.Mode)
+            {
+                roleRepository.Insert(model);
+            }
+            else if (ActionMode.Edit == model.Mode)
+            {
+                roleRepository.Update(model);
+            }
+
+            return Ok();
+        }
 
         private readonly RoleManager<Role> roleManager;
+        private readonly IRoleRepository roleRepository;
 
         public RoleManagementController(
-            RoleManager<Role> roleManager)
+            RoleManager<Role> roleManager,
+            IRoleRepository roleRepository)
         {
             this.roleManager = roleManager;
+            this.roleRepository = roleRepository;
         }
     }
 }
