@@ -10,7 +10,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F25E1288-9D95-491B-A11A-3A2D7350E782}"
 	ProjectSection(SolutionItems) = preProject
 		docker-compose.yml = docker-compose.yml
-		migration-add-db.ps1 = migration-add-db.ps1
+		migration-add-Initial-db.ps1 = migration-add-Initial-db.ps1
+		migration-add-InitialApiMenuData-db.ps1 = migration-add-InitialApiMenuData-db.ps1
+		migration-add-UpdateApiMenuData-db.ps1 = migration-add-UpdateApiMenuData-db.ps1
 		migration-update-db.ps1 = migration-update-db.ps1
 		scaffolding-schema-public.ps1 = scaffolding-schema-public.ps1
 	EndProjectSection
@@ -20,6 +22,10 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PracticeReactApp.Infrastructure", "PracticeReactApp.Infrastructure\PracticeReactApp.Infrastructure.csproj", "{FF082639-0654-498A-ABBD-CD74950A8825}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PracticeReactApp.Migrations", "PracticeReactApp.Migrations\PracticeReactApp.Migrations.csproj", "{3B642E09-C62A-4358-B872-EDA1E010D565}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{B5571A17-4C78-4EC7-B55E-10F2898CB85C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PracticeReactApp.Server.Test", "PracticeReactApp.Server.Test\PracticeReactApp.Server.Test.csproj", "{EAA5A1D1-70EC-420F-B762-36DDC0253C50}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -49,9 +55,16 @@ Global
 		{3B642E09-C62A-4358-B872-EDA1E010D565}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3B642E09-C62A-4358-B872-EDA1E010D565}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3B642E09-C62A-4358-B872-EDA1E010D565}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EAA5A1D1-70EC-420F-B762-36DDC0253C50}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EAA5A1D1-70EC-420F-B762-36DDC0253C50}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EAA5A1D1-70EC-420F-B762-36DDC0253C50}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EAA5A1D1-70EC-420F-B762-36DDC0253C50}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{EAA5A1D1-70EC-420F-B762-36DDC0253C50} = {B5571A17-4C78-4EC7-B55E-10F2898CB85C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9BE435E1-D3AA-4701-8D1B-8A3D3208AE61}

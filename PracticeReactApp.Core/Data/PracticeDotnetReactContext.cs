@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using PracticeReactApp.Core.Constants;
 using PracticeReactApp.Core.Data.Entities;
 
 namespace PracticeReactApp.Core.Data;
@@ -24,6 +25,97 @@ public partial class PracticeDotnetReactContext : AuthorizeDBContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        #region seed data
+        
+        var apiEndpoints = new Apiendpoint[] 
+        {
+            new Apiendpoint ()
+            {
+                Code = ApiEndpointCode.Account,
+                Name = "Account",
+                Path = "Account",
+                IsActive = true
+            },
+            new Apiendpoint ()
+            {
+                Code = ApiEndpointCode.RoleManagement,
+                Name = "Role mangement",
+                Path = "RoleManagement",
+                IsActive = true
+            },
+            new Apiendpoint ()
+            {
+                Code = ApiEndpointCode.TestAware,
+                Name = "Test Aware",
+                Path = "TestAware",
+                IsActive = true
+            }
+        };
+
+        var roleApiEndpoints = new RoleApiendpoint[]
+        {
+            new RoleApiendpoint ()
+            {
+                Id = 1,
+                RoleId = RoleCode.Admin,
+                Apicode = ApiEndpointCode.Account
+            },
+            new RoleApiendpoint ()
+            {
+                Id = 2,
+                RoleId = RoleCode.Admin,
+                Apicode = ApiEndpointCode.RoleManagement
+            },
+            new RoleApiendpoint ()
+            {
+                Id = 3,
+                RoleId = RoleCode.Admin,
+                Apicode = ApiEndpointCode.TestAware
+            },
+        };
+
+        var menus = new Menu[]
+        {
+            new Menu()
+            {
+                Code = MenuCode.User,
+                Name = "User",
+                Path = "/user",
+                Icon = "ic_user",
+                Order = 1,
+                IsDisplay = true,
+                IsActive = true
+            },
+            new Menu()
+            {
+                Code = MenuCode.RoleManagement,
+                Name = "Role",
+                Path = "/role",
+                Icon = "ic_user",
+                Order = 2,
+                IsDisplay = true,
+                IsActive = true
+            }
+        };
+
+        var roleMenus = new RoleMenu[]
+        { 
+            new RoleMenu()
+            {
+                Id = 1,
+                RoleId = RoleCode.Admin,
+                MenuCode = MenuCode.User
+            },
+            new RoleMenu()
+            { 
+                Id = 2,
+                RoleId = RoleCode.Admin,
+                MenuCode = MenuCode.RoleManagement,
+            }
+        };
+        
+        #endregion
+
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.Entity<Apiendpoint>(entity =>
@@ -37,6 +129,8 @@ public partial class PracticeDotnetReactContext : AuthorizeDBContext
             entity.Property(e => e.Code).HasMaxLength(50);
             entity.Property(e => e.Name).HasMaxLength(256);
             entity.Property(e => e.Path).HasMaxLength(256);
+
+            entity.HasData(apiEndpoints);
         });
 
         modelBuilder.Entity<Menu>(entity =>
@@ -53,6 +147,8 @@ public partial class PracticeDotnetReactContext : AuthorizeDBContext
             entity.Property(e => e.Name).HasMaxLength(256);
             entity.Property(e => e.ParentCode).HasMaxLength(50);
             entity.Property(e => e.Path).HasMaxLength(256);
+
+            entity.HasData(menus);
         });
 
         modelBuilder.Entity<RoleApiendpoint>(entity =>
@@ -72,6 +168,8 @@ public partial class PracticeDotnetReactContext : AuthorizeDBContext
             entity.HasOne(d => d.Role).WithMany(p => p.RoleApiendpoints)
                 .HasForeignKey(d => d.RoleId)
                 .HasConstraintName("FK_RoleAPIEndpoint_Role_RoleId");
+
+            entity.HasData(roleApiEndpoints);
         });
 
         modelBuilder.Entity<RoleMenu>(entity =>
@@ -89,6 +187,8 @@ public partial class PracticeDotnetReactContext : AuthorizeDBContext
             entity.HasOne(d => d.Role).WithMany(p => p.RoleMenus)
                 .HasForeignKey(d => d.RoleId)
                 .HasConstraintName("FK_RoleMenu_Role_RoleId");
+
+            entity.HasData(roleMenus);
         });
     }
 }

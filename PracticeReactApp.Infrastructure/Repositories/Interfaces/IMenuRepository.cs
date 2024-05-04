@@ -1,12 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using PracticeReactApp.Core.Data.Entities;
 
 namespace PracticeReactApp.Infrastructures.Repositories.Interfaces
 {
     public interface IMenuRepository
     {
-        
+        List<Menu> GetByCode(string? code);
     }
 }

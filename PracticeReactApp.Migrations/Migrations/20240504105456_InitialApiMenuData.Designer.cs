@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using PracticeReactApp.Core.Data;
@@ -11,9 +12,11 @@ using PracticeReactApp.Core.Data;
 namespace PracticeReactApp.Migrations.Migrations
 {
     [DbContext(typeof(PracticeDotnetReactContext))]
-    partial class PracticeDotnetReactContextModelSnapshot : ModelSnapshot
+    [Migration("20240504105456_InitialApiMenuData")]
+    partial class InitialApiMenuData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -163,21 +166,18 @@ namespace PracticeReactApp.Migrations.Migrations
                         new
                         {
                             Code = "AC0001",
-                            IsActive = true,
                             Name = "Account",
                             Path = "Account"
                         },
                         new
                         {
                             Code = "RM0001",
-                            IsActive = true,
                             Name = "Role mangement",
                             Path = "RoleManagement"
                         },
                         new
                         {
                             Code = "TA0001",
-                            IsActive = true,
                             Name = "Test Aware",
                             Path = "TestAware"
                         });
@@ -317,19 +317,19 @@ namespace PracticeReactApp.Migrations.Migrations
                         {
                             Id = 1L,
                             Apicode = "AC0001",
-                            RoleId = "ADMIN"
+                            RoleId = "000000"
                         },
                         new
                         {
                             Id = 2L,
                             Apicode = "RM0001",
-                            RoleId = "ADMIN"
+                            RoleId = "000000"
                         },
                         new
                         {
                             Id = 3L,
                             Apicode = "TA0001",
-                            RoleId = "ADMIN"
+                            RoleId = "000000"
                         });
                 });
 
@@ -367,13 +367,13 @@ namespace PracticeReactApp.Migrations.Migrations
                         {
                             Id = 1L,
                             MenuCode = "US0001",
-                            RoleId = "ADMIN"
+                            RoleId = "000000"
                         },
                         new
                         {
                             Id = 2L,
                             MenuCode = "RM0001",
-                            RoleId = "ADMIN"
+                            RoleId = "000000"
                         });
                 });
 
@@ -451,7 +451,7 @@ namespace PracticeReactApp.Migrations.Migrations
                         {
                             Id = "000000",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "eba95ca6-3849-4a9f-9ae4-5fa68a67bd62",
+                            ConcurrencyStamp = "5f870de6-5bfe-4e51-877f-25714f576468",
                             Email = "sysadmin@gmail.com",
                             EmailConfirmed = false,
                             FirstName = "Admin",
@@ -461,7 +461,7 @@ namespace PracticeReactApp.Migrations.Migrations
                             NormalizedUserName = "SYSADMIN@GMAIL.COM",
                             PasswordHash = "AQAAAAIAAYagAAAAEPv9/zAx1cchleh9OoCJ626OM8Z+nzSSr13yUa/lru/kAdACgtIPSD4o74IwwS2jKQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "5f00788f-376b-40e0-882e-e3ff72664071",
+                            SecurityStamp = "92b8c01b-1fd9-404c-8af0-9808032b985d",
                             TwoFactorEnabled = false,
                             UserName = "sysadmin@gmail.com"
                         });

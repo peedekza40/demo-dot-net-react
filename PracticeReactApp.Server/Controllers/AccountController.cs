@@ -64,7 +64,7 @@ namespace PracticeReactApp.Server.Controllers
             }
 
             var user = userManager.Users.FirstOrDefault(x => x.UserName == model.UserName);
-            var resultAddRole = await userManager.AddToRoleAsync(user, Roles.User);
+            var resultAddRole = await userManager.AddToRoleAsync(user, RoleCode.User);
             if (resultAddRole.Succeeded == false)
             {
                 return BadRequest(resultAddRole);

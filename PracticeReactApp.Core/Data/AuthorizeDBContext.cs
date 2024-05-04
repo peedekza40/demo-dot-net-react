@@ -24,7 +24,7 @@ public partial class AuthorizeDBContext : IdentityDbContext<User, Role, string>
             Id = Constants.Base.SystemAdminID,
             UserName = "sysadmin@gmail.com",
             NormalizedUserName = "SYSADMIN@GMAIL.COM",
-            PasswordHash = "AQAAAAIAAYagAAAAEPv9/zAx1cchleh9OoCJ626OM8Z+nzSSr13yUa/lru/kAdACgtIPSD4o74IwwS2jKQ==",
+            PasswordHash = "AQAAAAIAAYagAAAAEPv9/zAx1cchleh9OoCJ626OM8Z+nzSSr13yUa/lru/kAdACgtIPSD4o74IwwS2jKQ==",//Password : pass@word1
             FirstName = "Admin",
             LastName = ".A",
             Email = "sysadmin@gmail.com",
@@ -34,7 +34,7 @@ public partial class AuthorizeDBContext : IdentityDbContext<User, Role, string>
 
         var adminRole = new Role
         {
-            Id = Constants.Roles.Admin,
+            Id = Constants.RoleCode.Admin,
             Name = "Admin",
             NormalizedName = "ADMIN"
         };
@@ -42,7 +42,7 @@ public partial class AuthorizeDBContext : IdentityDbContext<User, Role, string>
         var userAdminRole = new IdentityUserRole<string>
         {
             UserId = Constants.Base.SystemAdminID,
-            RoleId = Constants.Roles.Admin
+            RoleId = Constants.RoleCode.Admin
         };
 
         base.OnModelCreating(builder);

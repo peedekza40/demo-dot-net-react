@@ -12,7 +12,7 @@ using PracticeReactApp.Core.Data;
 namespace PracticeReactApp.Migrations.Migrations
 {
     [DbContext(typeof(PracticeDotnetReactContext))]
-    [Migration("20240504083033_InitialDB")]
+    [Migration("20240501152443_InitialDB")]
     partial class InitialDB
     {
         /// <inheritdoc />

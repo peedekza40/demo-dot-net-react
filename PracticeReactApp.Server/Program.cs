@@ -76,6 +76,7 @@ try
         });
     });
 
+    builder.Services.AddHttpClient();
     builder.Services.AddHttpContextAccessor();
 
     //add service to the container

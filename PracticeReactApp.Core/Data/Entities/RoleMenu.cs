@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 
 namespace PracticeReactApp.Core.Data.Entities;
@@ -11,6 +12,7 @@ public partial class RoleMenu
 
     public string MenuCode { get; set; } = null!;
 
+    [JsonIgnore]
     public virtual Menu MenuCodeNavigation { get; set; } = null!;
 
     public virtual Role Role { get; set; } = null!;
