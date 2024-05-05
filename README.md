@@ -6,6 +6,9 @@
 * run file script powershell ชื่อ "migration-update-db.ps1"
 * run project
 
+### .Net Exam
+![image](https://github.com/peedekza40/demo-dot-net-react/assets/45896354/4f8fd5ae-3cd2-449e-88c1-0e1b3595a56b)
+
 ## Authors
 Ruangwit Nakboon  
 ruangwit.nakboon@gmail.com
