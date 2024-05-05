@@ -32,15 +32,15 @@ namespace PracticeReactApp.Server.Controllers
 
             var charsDub = chars.GroupBy(x => x.ToString())
                                 .Where(x => x.Count() >= 2)
-                                .Select(x => new { Rank = x.Key });
+                                .Select(x => new { rank = x.Key });
 
             var alphabetResults = charsDub
-                            .Where(x => !int.TryParse(x.Rank, out _))
-                            .OrderBy(x => x.Rank);
+                            .Where(x => !int.TryParse(x.rank, out _))
+                            .OrderBy(x => x.rank, StringComparer.Ordinal);
 
             var numberResults = charsDub
-                            .Where(x => int.TryParse(x.Rank, out _))
-                            .OrderBy(x => int.Parse(x.Rank));
+                            .Where(x => int.TryParse(x.rank, out _))
+                            .OrderBy(x => int.Parse(x.rank));
 
             var results = alphabetResults.Concat(numberResults).ToList();
             return Ok(results);
