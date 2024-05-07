@@ -6,13 +6,6 @@
 * run file script powershell ชื่อ "migration-update-db.ps1"
 * run project
 
-### .Net Exam
-* ข้อที่ 1 คือ Test1()
-* ข้อที่ 2 คือ Test2()
-* ข้อที่ 3 คือ Test3()
-
-![image](https://github.com/peedekza40/demo-dot-net-react/assets/45896354/4f8fd5ae-3cd2-449e-88c1-0e1b3595a56b)
-
 ## Authors
 Ruangwit Nakboon  
 ruangwit.nakboon@gmail.com
