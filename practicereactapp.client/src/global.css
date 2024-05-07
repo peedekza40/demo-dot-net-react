@@ -1,2 +1,6 @@
 /* scrollbar */
 @import 'simplebar-react/dist/simplebar.min.css';
+
+div:where(.swal2-container) {
+    z-index: 9999 !important;
+}

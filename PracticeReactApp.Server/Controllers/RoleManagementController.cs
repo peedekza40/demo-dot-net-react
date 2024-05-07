@@ -6,7 +6,9 @@ using PracticeReactApp.Core.Data.Entities;
 using PracticeReactApp.Core.Models;
 using PracticeReactApp.Infrastructures.Repositories.Interfaces;
 using PracticeReactApp.Server.Filters;
+using PracticeReactApp.Server.ViewModels;
 using PracticeReactApp.Server.ViewModels.RoleManagement;
+using System.Data;
 
 namespace PracticeReactApp.Server.Controllers
 {
@@ -21,7 +23,30 @@ namespace PracticeReactApp.Server.Controllers
         {
             var result = roleRepository.GetDataTableResponse(dataTableRequest);
             var jsonData = JsonConvert.SerializeObject(result);
-            return Ok(jsonData);
+            return Ok(new ApiResponseViewModel<string>() { Data = jsonData });
+        }
+
+        [HttpPost]
+        [Route("GetById")]
+        public IActionResult GetById([FromBody] string id)
+        { 
+            var role = roleRepository.GetById(id);
+            if(role == null)
+            {
+                Ok(new ApiResponseViewModel<Role?>() { 
+                    IsSuccess = false,
+                    ErrorMessage = "Role not found."
+                });
+            }
+
+            var model = new MaintenanceRoleViewModel
+            {
+                Id = role.Id,
+                Name = role.Name,
+                NormalizedName = role.NormalizedName
+            };
+
+            return Ok(new ApiResponseViewModel<string>() { Data = JsonConvert.SerializeObject(model) });
         }
 
         [HttpPost]

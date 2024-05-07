@@ -9,7 +9,12 @@
     <PublishAssetsDirectory>$(MSBuildProjectDirectory)\dist</PublishAssetsDirectory>
   </PropertyGroup>
   <ItemGroup>
-    <Folder Include="src\components\table\" />
     <Folder Include="src\sections\role-management\view\" />
+  </ItemGroup>
+  <ItemGroup>
+    <TypeScriptConfiguration Remove="src\components\table\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="src\components\table\**" />
   </ItemGroup>
 </Project>

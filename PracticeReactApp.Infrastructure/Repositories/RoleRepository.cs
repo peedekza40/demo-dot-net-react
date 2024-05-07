@@ -15,6 +15,11 @@ namespace PracticeReactApp.Infrastructures.Repositories
             return roleManager.Roles.ToDataTablesResponse(dataTableRequest);
         }
 
+        public Role? GetById(string id)
+        {
+            return roleManager.Roles.FirstOrDefault(x => x.Id == id);
+        }
+
         public List<Role> GetUserRoles(User user)
         {
             var roles = userManager.GetRolesAsync(user).Result;

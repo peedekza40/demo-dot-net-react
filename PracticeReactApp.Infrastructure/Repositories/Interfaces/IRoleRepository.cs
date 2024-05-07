@@ -7,6 +7,8 @@ namespace PracticeReactApp.Infrastructures.Repositories.Interfaces
     {
         DataTableResponseModel<Role> GetDataTableResponse(DataTableRequestModel dataTableRequest);
 
+        Role? GetById(string id);
+
         List<Role> GetUserRoles(User user);
 
         bool IsExists(string id);

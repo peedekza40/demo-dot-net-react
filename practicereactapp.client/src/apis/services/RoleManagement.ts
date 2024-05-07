@@ -30,6 +30,33 @@ export async function search(value: any,
         });
 }
 
+export async function getById(id: string,
+    callbackSuccess?: callbackSuccessType,
+    callbackError?: callbackErrorType,
+    callbackFinish?: callbackFinishType) {
+    axios.post(config.basePathAPI + 'RoleManagement/GetById', id,
+        {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(function (response) {
+            if (callbackSuccess !== undefined && callbackSuccess !== null) {
+                callbackSuccess(response);
+            }
+        })
+        .catch(function (error) {
+            if (callbackError !== undefined && callbackError !== null) {
+                callbackError(error);
+            }
+        })
+        .finally(function () {
+            if (callbackFinish !== undefined && callbackFinish !== null) {
+                callbackFinish();
+            }
+        });
+}
+
 export async function isExists(id: string): Promise<{ data: boolean }> {
     const configRequest = {
         headers: {

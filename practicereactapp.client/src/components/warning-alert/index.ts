@@ -1,0 +1,1 @@
+export { default as warningSweetAlert } from './warning-sweet-alert';
