@@ -46,10 +46,11 @@ function FormDialog<T extends FieldValues>({ formSchema, dialogTitle, isOpen, re
     } = methods;
 
     useEffect(() => {
-        if (isSubmitSuccessful) {
-            // reset();
+        if(isOpen)
+        {
+            reset();
         }
-    }, [isSubmitSuccessful, reset]);
+    }, [isSubmitSuccessful, reset, isOpen]);
 
     //handle submit
     const onSubmitHandler: SubmitHandler<T> = (dataSubmit: T) => {
@@ -60,7 +61,6 @@ function FormDialog<T extends FieldValues>({ formSchema, dialogTitle, isOpen, re
 
     //handle close
     const handleClose = () => {
-        //reset();
         setIsHasError(false);
         setErrorRerponse(null);
 
@@ -88,7 +88,7 @@ function FormDialog<T extends FieldValues>({ formSchema, dialogTitle, isOpen, re
                             isHasError={isHasError}
                             errorResponse={errorResponse} />
 
-                        {(renderField(register, errors))}
+                        {renderField(register, errors)}
 
                     </DialogContent>
                     <DialogActions>

@@ -9,8 +9,10 @@ import Typography from '@mui/material/Typography';
 import CircularProgress from '@mui/material/CircularProgress';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
+import MenuItem from '@mui/material/MenuItem';
 import MUIDataTable from "mui-datatables/dist";
 import { plainToClass } from "class-transformer"; 
+import { forIn } from 'lodash';
 
 import Iconify from 'src/components/iconify';
 import { errorSweetAlert } from 'src/components/error-alert';
@@ -19,7 +21,6 @@ import { warningSweetAlert } from 'src/components/warning-alert';
 
 import ActionMode from 'src/constants/action-mode';
 import DataTableActionType from 'src/constants/data-table-action-type';
-import FormRoleDialog from 'src/sections/role-management/form-role-dialog';
 import FormDialog from 'src/components/form-dialog';
 import { search as searchApi } from "@/apis/services/RoleManagement";
 import RoleForm, { roleFormSchema } from '../../../models/RoleForm';
@@ -51,6 +52,11 @@ function RoleManagementView() {
     const [formRoleIsOpen, setFormRoleIsOpen] = useState<boolean>(false);
     const [formRoleActionMode, setFormRoleActionMode] = useState<ActionMode>(ActionMode.Add);
     const [formRoleData, setFormRoleData] = useState<RoleForm | null>(null);
+    
+    for (const key in ActionMode) {
+        console.log(key);
+        // Use 'value' as needed
+    }
 
     const columns = [
         {
@@ -144,7 +150,11 @@ function RoleManagementView() {
                 (response: any) => {
                     if (response.data.isSuccess) {
                         const roleData: RoleForm = plainToClass(RoleForm, JSON.parse(response.data.data));
-                        setFormRoleData(roleData);
+                        const tempRoleData = formRoleData ?? new RoleForm();
+                        tempRoleData.id = roleData.id;
+                        tempRoleData.name = roleData.name;
+
+                        setFormRoleData(tempRoleData);
                         setFormRoleIsOpen(true);
                     }
                     else {
@@ -156,6 +166,7 @@ function RoleManagementView() {
                 });
         }
         else {
+            setFormRoleData(null);
             setFormRoleIsOpen(true);
         }
     };
@@ -163,6 +174,7 @@ function RoleManagementView() {
     const renderField = (register: UseFormRegister<RoleForm>, errors?: FieldErrors<RoleForm>) => {
         return (
             <Stack spacing={3} sx={{ my: 3 }}>
+
                 <TextField
                     size="small"
                     label="ID *"
@@ -171,6 +183,9 @@ function RoleManagementView() {
                     error={!!errors?.id}
                     helperText={errors?.id?.message}
                     value={formRoleData?.id}
+                    InputProps={{
+                        readOnly: formRoleActionMode == ActionMode.Edit
+                    }}
                 />
                 <TextField
                     size="small"
@@ -181,6 +196,26 @@ function RoleManagementView() {
                     helperText={errors?.name?.message}
                     value={formRoleData?.name}
                 />
+                <TextField
+                    select
+                    size="small"
+                    {...register('mode')}
+                    name="mode"
+                    error={!!errors?.mode}
+                    helperText={errors?.mode?.message}
+                    value={formRoleActionMode}
+                    // InputProps={{
+                    //     readOnly: formRoleActionMode == ActionMode.Edit
+                    // }}
+                    // sx={{ 
+                    //     display: 'none' 
+                    // }}
+                    {...forIn(ActionMode, (value, key) => (
+                        <MenuItem key={key} value={value}>
+                            {key}
+                        </MenuItem>
+                    ))}
+                ></TextField>
             </Stack>
         )
     }
@@ -199,7 +234,6 @@ function RoleManagementView() {
                     setIsHasError(false);
                     setErrorRerponse(null);
                     setFormRoleIsOpen(false);
-
                     successSweetAlert();
                 }
             },

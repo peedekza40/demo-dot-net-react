@@ -25,8 +25,7 @@ export const registerFormSchema: any = object({
     password: string().nonempty("Password is required")
         .min(config.passwordMinLength, `Password must be more than ${config.passwordMinLength} characters`),
     confirmPassword: string({ required_error: "Confirm password is required" })
-})
-    .refine((schema) => schema.password === schema.confirmPassword, {
-        message: "Passwords don't match",
-        path: ["confirmPassword"]
-    });
+}).refine((schema) => schema.password === schema.confirmPassword, {
+    message: "Passwords don't match",
+    path: ["confirmPassword"]
+});
