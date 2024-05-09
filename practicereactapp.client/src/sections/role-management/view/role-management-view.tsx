@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from 'react';
 import { UseFormRegister, FieldErrors } from 'react-hook-form';
+import { useRouter } from 'src/routes/hooks';
 import Card from '@mui/material/Card';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
@@ -12,7 +13,6 @@ import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
 import MUIDataTable from "mui-datatables/dist";
 import { plainToClass } from "class-transformer"; 
-import { forIn } from 'lodash';
 
 import Iconify from 'src/components/iconify';
 import { errorSweetAlert } from 'src/components/error-alert';
@@ -23,11 +23,12 @@ import ActionMode from 'src/constants/action-mode';
 import DataTableActionType from 'src/constants/data-table-action-type';
 import FormDialog from 'src/components/form-dialog';
 import { search as searchApi } from "@/apis/services/RoleManagement";
-import RoleForm, { roleFormSchema } from '../../../models/RoleForm';
+import RoleForm, { roleFormSchema } from 'src/models/RoleForm';
 
 import { saveRole as saveRoleApi } from "@/apis/services/RoleManagement";
 import { getById as getByIdApi } from "@/apis/services/RoleManagement";
 import { ErrorResponse } from "src/utils/global-type";
+import { IEnumItem, getEnumList } from "src/utils/enum-list";
 
 type DataTableOption = {
     page: number;
@@ -38,6 +39,8 @@ type DataTableOption = {
 }
 
 function RoleManagementView() {
+    const router = useRouter();
+
     //state table
     const [dataTableOption, setDataTableOption] = useState<DataTableOption>({
         page: 0,
@@ -52,11 +55,9 @@ function RoleManagementView() {
     const [formRoleIsOpen, setFormRoleIsOpen] = useState<boolean>(false);
     const [formRoleActionMode, setFormRoleActionMode] = useState<ActionMode>(ActionMode.Add);
     const [formRoleData, setFormRoleData] = useState<RoleForm | null>(null);
-    
-    for (const key in ActionMode) {
-        console.log(key);
-        // Use 'value' as needed
-    }
+
+    //set action mode list
+    const actionModes: IEnumItem[] = getEnumList(ActionMode);
 
     const columns = [
         {
@@ -198,24 +199,24 @@ function RoleManagementView() {
                 />
                 <TextField
                     select
+                    type="number"
                     size="small"
-                    {...register('mode')}
+                    {...register('mode', { valueAsNumber: true })}
                     name="mode"
                     error={!!errors?.mode}
                     helperText={errors?.mode?.message}
                     value={formRoleActionMode}
-                    // InputProps={{
-                    //     readOnly: formRoleActionMode == ActionMode.Edit
-                    // }}
-                    // sx={{ 
-                    //     display: 'none' 
-                    // }}
-                    {...forIn(ActionMode, (value, key) => (
-                        <MenuItem key={key} value={value}>
-                            {key}
+                    InputProps={{ readOnly: true }}
+                    sx={{ 
+                        display: 'none' 
+                    }}
+                >
+                    {actionModes.map((item, index) => (
+                        <MenuItem key={index} value={item.value}>
+                            {item.key}
                         </MenuItem>
                     ))}
-                ></TextField>
+                </TextField>
             </Stack>
         )
     }
@@ -234,7 +235,7 @@ function RoleManagementView() {
                     setIsHasError(false);
                     setErrorRerponse(null);
                     setFormRoleIsOpen(false);
-                    successSweetAlert();
+                    successSweetAlert(() => router.reload());
                 }
             },
             (error: any) => {

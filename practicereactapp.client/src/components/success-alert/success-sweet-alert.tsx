@@ -2,15 +2,18 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 import Swal from 'sweetalert2';
+import { useRouter } from 'src/routes/hooks';
 
-function successSweetAlert() {
+function successSweetAlert(onClosed?: () => void) {
     Swal.fire({
         icon: "success",
         title: "Save success",
         showConfirmButton: false,
         timer: 1500
-    }).then((result) => {
-        console.log(result);
+    }).then(() => {
+        if (onClosed !== undefined) {
+            onClosed();
+        }
     });
 }
 

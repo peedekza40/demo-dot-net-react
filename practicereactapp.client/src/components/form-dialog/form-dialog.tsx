@@ -35,7 +35,7 @@ function FormDialog<T extends FieldValues>({ formSchema, dialogTitle, isOpen, re
 
     //initial handle form
     const methods = useForm<T>({
-        resolver: zodResolver(formSchema),
+        resolver: zodResolver(formSchema)
     });
 
     const {
@@ -46,8 +46,7 @@ function FormDialog<T extends FieldValues>({ formSchema, dialogTitle, isOpen, re
     } = methods;
 
     useEffect(() => {
-        if(isOpen)
-        {
+        if(isOpen) {
             reset();
         }
     }, [isSubmitSuccessful, reset, isOpen]);
