@@ -4,4 +4,5 @@ export default abstract class DataTableActionType {
     public static search = "search";
     public static changePage = "changePage";
     public static changeRowsPerPage = "changeRowsPerPage";
+    public static sort = "sort";
 }

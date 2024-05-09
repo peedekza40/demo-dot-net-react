@@ -2,7 +2,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from 'react';
 import { UseFormRegister, FieldErrors } from 'react-hook-form';
-import { useRouter } from 'src/routes/hooks';
 import Card from '@mui/material/Card';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
@@ -39,8 +38,6 @@ type DataTableOption = {
 }
 
 function RoleManagementView() {
-    const router = useRouter();
-
     //state table
     const [dataTableOption, setDataTableOption] = useState<DataTableOption>({
         page: 0,
@@ -53,8 +50,7 @@ function RoleManagementView() {
 
     //state form
     const [formRoleIsOpen, setFormRoleIsOpen] = useState<boolean>(false);
-    const [formRoleActionMode, setFormRoleActionMode] = useState<ActionMode>(ActionMode.Add);
-    const [formRoleData, setFormRoleData] = useState<RoleForm | null>(null);
+    const [formRoleData, setFormRoleData] = useState<RoleForm>(new RoleForm());
 
     //set action mode list
     const actionModes: IEnumItem[] = getEnumList(ActionMode);
@@ -93,8 +89,12 @@ function RoleManagementView() {
         },
     ];
 
-    const search = (tableState: object) => {
-        setDataTableOption({ ...dataTableOption, isLoading: true });
+    const search = (tableState: DataTableOption) => {
+        setDataTableOption({ 
+            ...dataTableOption, 
+            sortOrder: tableState.sortOrder,
+            isLoading: true 
+        });
 
         searchApi(tableState,
             (response: any) => {
@@ -128,15 +128,16 @@ function RoleManagementView() {
         searchPlaceholder: "Search role...",
         serverSide: true,
         count: dataTableOption?.count,
-        onTableInit: (action: string, tableState: object) => {
+        onTableInit: (action: string, tableState: DataTableOption) => {
             search(tableState);
         },
-        onTableChange: (action: string, tableState: object) => {
+        onTableChange: (action: string, tableState: DataTableOption) => {
             if (action == DataTableActionType.change
                 || action == DataTableActionType.changePage
                 || action == DataTableActionType.changeRowsPerPage
                 || action == DataTableActionType.filterChange
-                || action == DataTableActionType.search) {
+                || action == DataTableActionType.search
+                || action == DataTableActionType.sort) {
                 search(tableState);
             }
         }
@@ -144,18 +145,17 @@ function RoleManagementView() {
 
     //handle form section
     const handleOpenFormRole = (actionMode: ActionMode, roleId: string | null) => {
-        setFormRoleActionMode(actionMode);
-
         if (actionMode == ActionMode.Edit) {
             getByIdApi(roleId ?? "",
                 (response: any) => {
                     if (response.data.isSuccess) {
                         const roleData: RoleForm = plainToClass(RoleForm, JSON.parse(response.data.data));
-                        const tempRoleData = formRoleData ?? new RoleForm();
-                        tempRoleData.id = roleData.id;
-                        tempRoleData.name = roleData.name;
-
-                        setFormRoleData(tempRoleData);
+                        setFormRoleData({
+                            ...formRoleData,
+                            id: roleData.id,
+                            name: roleData.name,
+                            mode: roleData.mode
+                        });
                         setFormRoleIsOpen(true);
                     }
                     else {
@@ -167,10 +167,36 @@ function RoleManagementView() {
                 });
         }
         else {
-            setFormRoleData(null);
+            setFormRoleData(new RoleForm());
             setFormRoleIsOpen(true);
         }
     };
+
+    const onSubmit = (
+        dataSubmit: RoleForm,
+        setIsLoading: (value: boolean) => void,
+        setIsHasError: (value: boolean) => void,
+        setErrorRerponse: (value: ErrorResponse | null) => void
+    ) => {
+        setIsLoading(true);
+        saveRoleApi(formRoleData,
+            (response: any) => {
+                if (response.status == 200) {
+                    setIsHasError(false);
+                    setErrorRerponse(null);
+                    setFormRoleIsOpen(false);
+                    successSweetAlert(() => search(dataTableOption));
+                }
+            },
+            (error: any) => {
+                setIsHasError(true);
+                if (error.response.status == 400 && error.response.data.errors.length >= 1) {
+                    setErrorRerponse(error.response.data);
+                }
+            },
+            () => setIsLoading(false)
+        );
+    }
 
     const renderField = (register: UseFormRegister<RoleForm>, errors?: FieldErrors<RoleForm>) => {
         return (
@@ -183,9 +209,13 @@ function RoleManagementView() {
                     name="id"
                     error={!!errors?.id}
                     helperText={errors?.id?.message}
-                    value={formRoleData?.id}
+                    value={formRoleData.id}
+                    onChange={(event) => setFormRoleData({
+                        ...formRoleData,
+                        id: event.target.value
+                    })}
                     InputProps={{
-                        readOnly: formRoleActionMode == ActionMode.Edit
+                        readOnly: formRoleData.mode == ActionMode.Edit
                     }}
                 />
                 <TextField
@@ -195,7 +225,11 @@ function RoleManagementView() {
                     name="name"
                     error={!!errors?.name}
                     helperText={errors?.name?.message}
-                    value={formRoleData?.name}
+                    value={formRoleData.name}
+                    onChange={(event) => setFormRoleData({
+                        ...formRoleData,
+                        name: event.target.value
+                    })}
                 />
                 <TextField
                     select
@@ -205,7 +239,7 @@ function RoleManagementView() {
                     name="mode"
                     error={!!errors?.mode}
                     helperText={errors?.mode?.message}
-                    value={formRoleActionMode}
+                    value={formRoleData.mode}
                     InputProps={{ readOnly: true }}
                     sx={{ 
                         display: 'none' 
@@ -220,34 +254,6 @@ function RoleManagementView() {
             </Stack>
         )
     }
-
-    const onSubmit = (
-        dataSubmit: RoleForm,
-        setIsLoading: (value: boolean) => void,
-        setIsHasError: (value: boolean) => void,
-        setErrorRerponse: (value: ErrorResponse | null) => void
-    ) => {
-        setIsLoading(true);
-        dataSubmit.mode = formRoleActionMode;
-        saveRoleApi(dataSubmit,
-            (response: any) => {
-                if (response.status == 200) {
-                    setIsHasError(false);
-                    setErrorRerponse(null);
-                    setFormRoleIsOpen(false);
-                    successSweetAlert(() => router.reload());
-                }
-            },
-            (error: any) => {
-                setIsHasError(true);
-                if (error.response.status == 400 && error.response.data.errors.length >= 1) {
-                    setErrorRerponse(error.response.data);
-                }
-            },
-            () => setIsLoading(false)
-        );
-    }
-
 
     return (
         <Container>
@@ -279,7 +285,7 @@ function RoleManagementView() {
 
             <FormDialog<RoleForm>
                 formSchema={roleFormSchema}
-                dialogTitle={formRoleActionMode == ActionMode.Add ? "Create Role" : "Edit Role"}
+                dialogTitle={formRoleData.mode == ActionMode.Add ? "Create Role" : "Edit Role"}
                 isOpen={formRoleIsOpen}
                 onSubmit={onSubmit}
                 onClose={() => setFormRoleIsOpen(false)}

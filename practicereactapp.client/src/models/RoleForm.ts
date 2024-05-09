@@ -6,6 +6,12 @@ export default class RoleForm {
     public id: string;
     public name: string;
     public mode: ActionMode;
+
+    constructor(){
+        this.id = '';
+        this.name = '';
+        this.mode = ActionMode.Add;
+    }
 }
 
 export const roleFormSchema = object({

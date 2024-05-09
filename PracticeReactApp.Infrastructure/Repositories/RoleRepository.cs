@@ -12,7 +12,9 @@ namespace PracticeReactApp.Infrastructures.Repositories
     {
         public DataTableResponseModel<Role> GetDataTableResponse(DataTableRequestModel dataTableRequest)
         {
-            return roleManager.Roles.ToDataTablesResponse(dataTableRequest);
+            return roleManager.Roles
+                .OrderBy(r => r.Id)
+                .ToDataTablesResponse(dataTableRequest);
         }
 
         public Role? GetById(string id)
