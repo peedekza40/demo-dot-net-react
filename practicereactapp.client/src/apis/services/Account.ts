@@ -7,24 +7,23 @@ export async function register(value: RegisterForm,
     callbackSuccess?: callbackSuccessType,
     callbackError?: callbackErrorType,
     callbackFinish?: callbackFinishType) {
-
     axios.post(config.basePathAPI + 'Account/Register', value,
         {
             headers: {
                 'Content-Type': 'application/json'
             }
         })
-        .then(function(response) {
+        .then(function (response) {
             if (callbackSuccess !== undefined && callbackSuccess !== null) {
                 callbackSuccess(response);
             }
         })
-        .catch(function(error) {
+        .catch(function (error) {
             if (callbackError !== undefined && callbackError !== null) {
                 callbackError(error);
             }
         })
-        .finally(function() {
+        .finally(function () {
             if (callbackFinish !== undefined && callbackFinish !== null) {
                 callbackFinish();
             }
@@ -34,7 +33,7 @@ export async function register(value: RegisterForm,
 export async function isExistsEmail(email: string): Promise<{ data: boolean }> {
     const configRequest = {
         headers: {
-          'Content-Type': 'application/json'
+            'Content-Type': 'application/json'
         }
     };
 
@@ -45,24 +44,23 @@ export async function getCurrentUserMenus(
     callbackSuccess?: callbackSuccessType,
     callbackError?: callbackErrorType,
     callbackFinish?: callbackFinishType) {
-
     axios.get(config.basePathAPI + 'Account/GetCurrentUserMenus',
         {
             headers: {
                 'Content-Type': 'application/json'
             }
         })
-        .then(function(response) {
+        .then(function (response) {
             if (callbackSuccess !== undefined && callbackSuccess !== null) {
                 callbackSuccess(response);
             }
         })
-        .catch(function(error) {
+        .catch(function (error) {
             if (callbackError !== undefined && callbackError !== null) {
                 callbackError(error);
             }
         })
-        .finally(function() {
+        .finally(function () {
             if (callbackFinish !== undefined && callbackFinish !== null) {
                 callbackFinish();
             }

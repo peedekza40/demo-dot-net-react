@@ -14,7 +14,7 @@ type Props = {
 
 interface IAuthContextValue {
     login(
-        values: LoginForm, 
+        values: LoginForm,
         callbackSuccess?: callbackSuccessType,
         callbackError?: callbackErrorType,
         callbackFinish?: callbackFinishType
@@ -38,15 +38,14 @@ export const AuthContext = createContext<IAuthContextValue>(null!);
 function AuthProvider({ children }: Props) {
     const userProfileStorageValue = localStorage.getItem(userProfileStorageKey);
     const [userProfile, setUserProfile] = useState<UserProfile | null>(userProfileStorageValue ? Object.assign(new UserProfile(), JSON.parse(userProfileStorageValue)) : null);
-    
 
     const getUserProfile = () => {
         if (!userProfileStorageValue) {
             axios.get('api/Account/GetCurrentUserProfile')
-            .then(function (response) {
-                localStorage.setItem(userProfileStorageKey, JSON.stringify(response.data));
-                setUserProfile(Object.assign(new UserProfile(), response.data));
-            });
+                .then(function (response) {
+                    localStorage.setItem(userProfileStorageKey, JSON.stringify(response.data));
+                    setUserProfile(Object.assign(new UserProfile(), response.data));
+                });
         }
     };
 
@@ -54,7 +53,6 @@ function AuthProvider({ children }: Props) {
         callbackSuccess?: callbackSuccessType,
         callbackError?: callbackErrorType,
         callbackFinish?: callbackFinishType) => {
-
         axios.post(config.basePathAPI + 'login?useCookies=true', {
             "email": values.email,
             "password": values.password
@@ -64,17 +62,17 @@ function AuthProvider({ children }: Props) {
                     'Content-Type': 'application/json'
                 }
             })
-            .then(function(response) {
+            .then(function (response) {
                 if (callbackSuccess !== undefined && callbackSuccess !== null) {
                     callbackSuccess(response);
                 }
             })
-            .catch(function(error) {
+            .catch(function (error) {
                 if (callbackError !== undefined && callbackError !== null) {
                     callbackError(error);
                 }
             })
-            .finally(function() {
+            .finally(function () {
                 if (callbackFinish !== undefined && callbackFinish !== null) {
                     callbackFinish();
                 }
@@ -83,7 +81,7 @@ function AuthProvider({ children }: Props) {
 
     const logout = (callbackSuccess?: callbackSuccessType) => {
         axios.post(config.basePathAPI + 'Account/Logout')
-            .then(function(response) {
+            .then(function (response) {
                 if (callbackSuccess !== undefined && callbackSuccess !== null) {
                     callbackSuccess(response);
                 }
@@ -94,20 +92,19 @@ function AuthProvider({ children }: Props) {
         callbackSuccess?: callbackSuccessType,
         callbackError?: callbackErrorType,
         callbackFinish?: callbackFinishType) => {
-
         axios.get(config.basePathAPI + 'Account/IsLogin')
-            .then(function(response) {
+            .then(function (response) {
                 if (callbackSuccess !== undefined && callbackSuccess !== null) {
                     callbackSuccess(response);
                 }
             })
-            .catch(function(error) {
+            .catch(function (error) {
                 if (callbackError !== undefined && callbackError !== null) {
                     callbackError(error);
                     localStorage.removeItem(userProfileStorageKey);
                 }
             })
-            .finally(function() {
+            .finally(function () {
                 if (callbackFinish !== undefined && callbackFinish !== null) {
                     callbackFinish();
                 }
@@ -126,4 +123,3 @@ function AuthProvider({ children }: Props) {
 }
 
 export default AuthProvider;
-

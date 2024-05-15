@@ -26,7 +26,7 @@ import Iconify from 'src/components/iconify';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, SubmitHandler, FormProvider } from 'react-hook-form';
 import { useAuth } from "src/hooks/use-auth";
-import LoginForm , { loginFormSchema } from "src/models/LoginForm";
+import LoginForm, { loginFormSchema } from "src/models/LoginForm";
 
 // ----------------------------------------------------------------------
 export default function LoginView() {

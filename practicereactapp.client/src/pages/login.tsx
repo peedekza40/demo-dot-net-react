@@ -5,13 +5,13 @@ import { LoginView } from 'src/sections/login';
 // ----------------------------------------------------------------------
 
 export default function LoginPage() {
-  return (
-    <>
-      <Helmet>
-        <title> Login | Minimal UI </title>
-      </Helmet>
+    return (
+        <>
+            <Helmet>
+                <title> Login | Minimal UI </title>
+            </Helmet>
 
-      <LoginView />
-    </>
-  );
+            <LoginView />
+        </>
+    );
 }

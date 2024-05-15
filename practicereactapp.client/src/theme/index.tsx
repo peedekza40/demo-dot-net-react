@@ -13,29 +13,29 @@ import { customShadows } from './custom-shadows';
 // ----------------------------------------------------------------------
 
 export default function ThemeProvider({ children }) {
-  const memoizedValue = useMemo(
-    () => ({
-      palette: palette(),
-      typography,
-      shadows: shadows(),
-      customShadows: customShadows(),
-      shape: { borderRadius: 8 },
-    }),
-    []
-  );
+    const memoizedValue = useMemo(
+        () => ({
+            palette: palette(),
+            typography,
+            shadows: shadows(),
+            customShadows: customShadows(),
+            shape: { borderRadius: 8 },
+        }),
+        []
+    );
 
-  const theme = createTheme(memoizedValue);
+    const theme = createTheme(memoizedValue);
 
-  theme.components = overrides(theme);
+    theme.components = overrides(theme);
 
-  return (
-    <MUIThemeProvider theme={theme}>
-      <CssBaseline />
-      {children}
-    </MUIThemeProvider>
-  );
+    return (
+        <MUIThemeProvider theme={theme}>
+            <CssBaseline />
+            {children}
+        </MUIThemeProvider>
+    );
 }
 
 ThemeProvider.propTypes = {
-  children: PropTypes.node,
+    children: PropTypes.node,
 };

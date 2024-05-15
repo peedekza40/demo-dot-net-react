@@ -28,9 +28,8 @@ import Menu from 'src/models/Menu';
 
 const menuStorageKey = "menu";
 
-export default function Nav({ openNav, onCloseNav }: {  openNav: boolean, onCloseNav: () => any}) {
+export default function Nav({ openNav, onCloseNav }: { openNav: boolean, onCloseNav: () => any }) {
     const auth = useAuth();
-    const pathname = usePathname();
     const upLg = useResponsive('up', 'lg');
 
     const menuStorageValue = localStorage.getItem(menuStorageKey);
@@ -40,7 +39,7 @@ export default function Nav({ openNav, onCloseNav }: {  openNav: boolean, onClos
         if (openNav) {
             onCloseNav();
         }
-        
+
         auth.updateState();
 
         //get current user menu
@@ -50,8 +49,7 @@ export default function Nav({ openNav, onCloseNav }: {  openNav: boolean, onClos
                 setMenus(response.data.data);
             });
         }
-
-    }, [pathname]);
+    });
 
     const renderAccount = (
         <Box
@@ -152,7 +150,7 @@ function NavItem({ item }: { item: Menu }) {
 
     const active = item.path === pathname;
 
-    if(item.isDisplay){
+    if (item.isDisplay) {
         return (
             <ListItemButton
                 component={RouterLink}
@@ -177,7 +175,7 @@ function NavItem({ item }: { item: Menu }) {
                 <Box component="span" sx={{ width: 24, height: 24, mr: 2 }}>
                     {icon(item.icon ?? "")}
                 </Box>
-    
+
                 <Box component="span">{item.name} </Box>
             </ListItemButton>
         );

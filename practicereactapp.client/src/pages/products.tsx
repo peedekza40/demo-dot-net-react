@@ -5,13 +5,13 @@ import { ProductsView } from 'src/sections/products/view';
 // ----------------------------------------------------------------------
 
 export default function ProductsPage() {
-  return (
-    <>
-      <Helmet>
-        <title> Products | Minimal UI </title>
-      </Helmet>
+    return (
+        <>
+            <Helmet>
+                <title> Products | Minimal UI </title>
+            </Helmet>
 
-      <ProductsView />
-    </>
-  );
+            <ProductsView />
+        </>
+    );
 }

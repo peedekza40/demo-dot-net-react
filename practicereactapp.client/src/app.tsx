@@ -8,11 +8,11 @@ import ThemeProvider from 'src/theme';
 // ----------------------------------------------------------------------
 
 export default function App() {
-  useScrollToTop();
+    useScrollToTop();
 
-  return (
-    <ThemeProvider>
-      <Router />
-    </ThemeProvider>
-  );
+    return (
+        <ThemeProvider>
+            <Router />
+        </ThemeProvider>
+    );
 }

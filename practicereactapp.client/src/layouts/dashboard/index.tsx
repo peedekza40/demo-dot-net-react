@@ -10,27 +10,27 @@ import Header from './header';
 // ----------------------------------------------------------------------
 
 export default function DashboardLayout({ children }) {
-  const [openNav, setOpenNav] = useState(false);
+    const [openNav, setOpenNav] = useState(false);
 
-  return (
-    <>
-      <Header onOpenNav={() => setOpenNav(true)} />
+    return (
+        <>
+            <Header onOpenNav={() => setOpenNav(true)} />
 
-      <Box
-        sx={{
-          minHeight: 1,
-          display: 'flex',
-          flexDirection: { xs: 'column', lg: 'row' },
-        }}
-      >
-        <Nav openNav={openNav} onCloseNav={() => setOpenNav(false)} />
+            <Box
+                sx={{
+                    minHeight: 1,
+                    display: 'flex',
+                    flexDirection: { xs: 'column', lg: 'row' },
+                }}
+            >
+                <Nav openNav={openNav} onCloseNav={() => setOpenNav(false)} />
 
-        <Main>{children}</Main>
-      </Box>
-    </>
-  );
+                <Main>{children}</Main>
+            </Box>
+        </>
+    );
 }
 
 DashboardLayout.propTypes = {
-  children: PropTypes.node,
+    children: PropTypes.node,
 };

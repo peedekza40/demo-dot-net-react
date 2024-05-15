@@ -7,7 +7,7 @@ export default class RoleForm {
     public name: string;
     public mode: ActionMode;
 
-    constructor(){
+    constructor() {
         this.id = '';
         this.name = '';
         this.mode = ActionMode.Add;
@@ -21,7 +21,7 @@ export const roleFormSchema = object({
     mode: nativeEnum(ActionMode).optional()
 }).refine(async (schema) => {
     try {
-        if(schema.mode == ActionMode.Add){
+        if (schema.mode == ActionMode.Add) {
             const response = await isExists(schema.id);
             return response.data == false;
         }

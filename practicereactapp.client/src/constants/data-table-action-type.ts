@@ -1,4 +1,4 @@
-export default abstract class DataTableActionType {         
+export default abstract class DataTableActionType {
     public static change = "change";
     public static filterChange = "filterChange";
     public static search = "search";
