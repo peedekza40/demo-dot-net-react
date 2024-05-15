@@ -22,8 +22,7 @@ namespace PracticeReactApp.Server.Controllers
         public IActionResult Search([FromBody] DataTableRequestModel dataTableRequest)
         {
             var result = roleRepository.GetDataTableResponse(dataTableRequest);
-            var jsonData = JsonConvert.SerializeObject(result);
-            return Ok(new ApiResponseViewModel<string>() { Data = jsonData });
+            return Ok(new ApiResponseViewModel<DataTableResponseModel<Role>?>() { Data = result });
         }
 
         [HttpPost]
@@ -46,7 +45,7 @@ namespace PracticeReactApp.Server.Controllers
                 NormalizedName = role.NormalizedName
             };
 
-            return Ok(new ApiResponseViewModel<string>() { Data = JsonConvert.SerializeObject(model) });
+            return Ok(new ApiResponseViewModel<MaintenanceRoleViewModel>() { Data = model });
         }
 
         [HttpPost]

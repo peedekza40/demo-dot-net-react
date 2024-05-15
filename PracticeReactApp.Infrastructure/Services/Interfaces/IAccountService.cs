@@ -6,6 +6,8 @@ namespace PracticeReactApp.Infrastructures.Services.Interfaces
     {
         User? GetCurrentUser();
 
+        List<Menu> GetCurrentUserMenus();
+
         bool CurrentUserIsHavePermissionEndpoint(string? path);
 
         bool IsHavePermissionEndpoint(User user, string? path);

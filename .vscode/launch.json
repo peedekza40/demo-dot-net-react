@@ -52,6 +52,31 @@
                 "group": "ionide",
                 "hidden": false
             }
+        },
+        {
+            "name": "PracticeReactApp.Server.csproj: only-api",
+            "type": "coreclr",
+            "request": "launch",
+            "program": "${workspaceFolder}/PracticeReactApp.Server/bin/Debug/net8.0/PracticeReactApp.Server.dll",
+            "args": [
+                ""
+            ],
+            "preLaunchTask": "build",
+            "cwd": "${workspaceFolder}/PracticeReactApp.Server",
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development",
+                "ASPNETCORE_URLS": "https://localhost:7146;"
+            },
+            "console": "internalConsole",
+            "stopAtEntry": false,
+            "presentation": {
+                "group": "ionide",
+                "hidden": false
+            }
         }
     ]
 }

@@ -1,14 +1,15 @@
-import { useEffect } from 'react';
-import PropTypes from 'prop-types';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useState, useEffect } from 'react';
 
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Drawer from '@mui/material/Drawer';
-//import Button from '@mui/material/Button';
 import Avatar from '@mui/material/Avatar';
 import { alpha } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import ListItemButton from '@mui/material/ListItemButton';
+import SvgColor from 'src/components/svg-color';
 
 import { usePathname } from 'src/routes/hooks';
 import { RouterLink } from 'src/routes/components';
@@ -19,24 +20,37 @@ import Logo from 'src/components/logo';
 import Scrollbar from 'src/components/scrollbar';
 
 import { NAV } from './config-layout';
-import navConfig from './config-navigation';
 import { useAuth } from 'src/hooks/use-auth';
+import { getCurrentUserMenus as getCurrentUserMenusApi } from 'src/apis/services/Account';
+import Menu from 'src/models/Menu';
 
 // ----------------------------------------------------------------------
 
-export default function Nav({ openNav, onCloseNav }) {
+const menuStorageKey = "menu";
+
+export default function Nav({ openNav, onCloseNav }: {  openNav: boolean, onCloseNav: () => any}) {
     const auth = useAuth();
-
     const pathname = usePathname();
-
     const upLg = useResponsive('up', 'lg');
+
+    const menuStorageValue = localStorage.getItem(menuStorageKey);
+    const [menus, setMenus] = useState<Menu[] | null>(menuStorageValue ? JSON.parse(menuStorageValue ?? "") : null);
 
     useEffect(() => {
         if (openNav) {
             onCloseNav();
         }
+        
         auth.updateState();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+
+        //get current user menu
+        if (!menuStorageValue) {
+            getCurrentUserMenusApi((response) => {
+                localStorage.setItem(menuStorageKey, JSON.stringify(response.data.data));
+                setMenus(response.data.data);
+            });
+        }
+
     }, [pathname]);
 
     const renderAccount = (
@@ -66,8 +80,8 @@ export default function Nav({ openNav, onCloseNav }) {
 
     const renderMenu = (
         <Stack component="nav" spacing={0.5} sx={{ px: 2 }}>
-            {navConfig.map((item) => (
-                <NavItem key={item.title} item={item} />
+            {menus?.map((item) => (
+                <NavItem key={item.code} item={item} />
             ))}
         </Stack>
     );
@@ -128,14 +142,12 @@ export default function Nav({ openNav, onCloseNav }) {
     );
 }
 
-Nav.propTypes = {
-    openNav: PropTypes.bool,
-    onCloseNav: PropTypes.func,
-};
-
 // ----------------------------------------------------------------------
+const icon = (name: string) => (
+    <SvgColor src={`/assets/icons/navbar/${name}.svg`} sx={{ width: 1, height: 1 }} />
+);
 
-function NavItem({ item }) {
+function NavItem({ item }: { item: Menu }) {
     const pathname = usePathname();
 
     const active = item.path === pathname;
@@ -163,10 +175,10 @@ function NavItem({ item }) {
                 }}
             >
                 <Box component="span" sx={{ width: 24, height: 24, mr: 2 }}>
-                    {item.icon}
+                    {icon(item.icon ?? "")}
                 </Box>
     
-                <Box component="span">{item.title} </Box>
+                <Box component="span">{item.name} </Box>
             </ListItemButton>
         );
     }
@@ -174,7 +186,3 @@ function NavItem({ item }) {
         return (<></>);
     }
 }
-
-NavItem.propTypes = {
-    item: PropTypes.object,
-};

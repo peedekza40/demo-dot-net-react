@@ -14,6 +14,13 @@ namespace PracticeReactApp.Infrastructures.Services
             return userContext != null ? userManager.GetUserAsync(userContext).Result : null;
         }
 
+        public List<Menu> GetCurrentUserMenus()
+        {
+            var currentUser = GetCurrentUser() ?? new User();
+            var roles = roleRepository.GetUserRoles(currentUser);
+            return menuRepository.GetByRoles(roles);
+        }
+
         public bool CurrentUserIsHavePermissionEndpoint(string? path)
         {
             var currentUser = GetCurrentUser();
@@ -35,15 +42,18 @@ namespace PracticeReactApp.Infrastructures.Services
         private readonly UserManager<User> userManager;
         private readonly IHttpContextAccessor httpContextAccessor;
         private readonly IRoleRepository roleRepository;
+        private readonly IMenuRepository menuRepository;
 
         public AccountSerivce(
             UserManager<User> userManager,
             IHttpContextAccessor httpContextAccessor,
-            IRoleRepository roleRepository)
+            IRoleRepository roleRepository,
+            IMenuRepository menuRepository)
         {
             this.userManager = userManager;
             this.httpContextAccessor = httpContextAccessor;
             this.roleRepository = roleRepository;
+            this.menuRepository = menuRepository;
         }
     }
 }

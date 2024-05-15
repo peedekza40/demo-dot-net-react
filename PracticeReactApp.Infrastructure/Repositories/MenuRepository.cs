@@ -16,6 +16,17 @@ namespace PracticeReactApp.Infrastructures.Repositories
                     .ToList();
         }
 
+        public List<Menu> GetByRoles(List<Role> roles)
+        {
+            var roleIds = roles.Select(x => x.Id).ToList() ?? new List<string>();
+            return context.RoleMenus
+                    .Where(x => roleIds.Contains(x.RoleId))
+                    .Include(x => x.MenuCodeNavigation)
+                    .Select(x => x.MenuCodeNavigation)
+                    .OrderBy(x => x.Order)
+                    .ToList();
+        }
+
         private readonly PracticeDotnetReactContext context;
 
         public MenuRepository(PracticeDotnetReactContext context)

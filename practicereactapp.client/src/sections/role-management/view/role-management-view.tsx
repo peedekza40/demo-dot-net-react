@@ -57,22 +57,22 @@ function RoleManagementView() {
 
     const columns = [
         {
-            name: 'Id',
+            name: 'id',
             label: 'ID',
             options: {},
         },
         {
-            name: 'Name',
+            name: 'name',
             label: 'Name',
             options: {},
         },
         {
-            name: 'NormalizedName',
+            name: 'normalizedName',
             label: 'Normalized Name',
             options: {},
         },
         {
-            name: 'Id',
+            name: 'id',
             label: 'Action',
             options: {
                 searchable: false,
@@ -99,7 +99,7 @@ function RoleManagementView() {
         searchApi(tableState,
             (response: any) => {
                 if (response.data.isSuccess) {
-                    const data = JSON.parse(response.data.data);
+                    const data = response.data.data;
                     setData(data.data);
                     setDataTableOption({
                         page: data.page,
@@ -149,7 +149,7 @@ function RoleManagementView() {
             getByIdApi(roleId ?? "",
                 (response: any) => {
                     if (response.data.isSuccess) {
-                        const roleData: RoleForm = plainToClass(RoleForm, JSON.parse(response.data.data));
+                        const roleData: RoleForm = plainToClass(RoleForm, response.data.data);
                         setFormRoleData({
                             ...formRoleData,
                             id: roleData.id,

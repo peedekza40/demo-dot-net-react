@@ -4,7 +4,10 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using PracticeReactApp.Core.Constants;
 using PracticeReactApp.Core.Data.Entities;
+using PracticeReactApp.Infrastructures.Repositories.Interfaces;
+using PracticeReactApp.Infrastructures.Services.Interfaces;
 using PracticeReactApp.Server.Filters;
+using PracticeReactApp.Server.ViewModels;
 using PracticeReactApp.Server.ViewModels.Account;
 
 namespace PracticeReactApp.Server.Controllers
@@ -18,14 +21,16 @@ namespace PracticeReactApp.Server.Controllers
         [Route("GetCurrentUserProfile")]
         public IActionResult GetCurrentUserProfile()
         {
-            var currentUser = userManager.GetUserAsync(User).Result;
-            return Ok(new
-            {
-                UserName = currentUser?.UserName,
-                Email = currentUser?.Email,
-                FirstName = currentUser?.FirstName,
-                LastName = currentUser?.LastName
-            });
+            var currentUser = accountSerivce.GetCurrentUser();
+            return Ok(currentUser);
+        }
+
+        [HttpGet]
+        [Route("GetCurrentUserMenus")]
+        public IActionResult GetCurrentUserMenus()
+        {
+            var menus = accountSerivce.GetCurrentUserMenus();
+            return Ok(new ApiResponseViewModel<List<Menu>?>() { Data = menus });
         }
 
         [HttpGet]
@@ -82,11 +87,14 @@ namespace PracticeReactApp.Server.Controllers
         }
 
         private readonly UserManager<User> userManager;
+        private readonly IAccountService accountSerivce;
 
         public AccountController(
-            UserManager<User> userManager)
+            UserManager<User> userManager,
+            IAccountService accountSerivce)
         {
             this.userManager = userManager;
+            this.accountSerivce = accountSerivce;
         }
     }
 }

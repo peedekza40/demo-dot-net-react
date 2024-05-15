@@ -23,5 +23,7 @@ public partial class Menu
 
     public bool? IsActive { get; set; }
 
+    [System.Text.Json.Serialization.JsonIgnore]
+    [Newtonsoft.Json.JsonIgnore]
     public virtual ICollection<RoleMenu> RoleMenus { get; set; } = new List<RoleMenu>();
 }

@@ -2,24 +2,30 @@ using Newtonsoft.Json;
 using PracticeReactApp.Core.Extensions;
 using System.Linq.Dynamic.Core;
 using System.Linq.Expressions;
+using System.Text.Json.Serialization;
 
 namespace PracticeReactApp.Core.Models
 {
     public class DataTableResponseModel<T>
     {
         [JsonProperty(PropertyName = "data")]
+        [JsonPropertyName("data")]
         public List<T> Data { get; set; } = new List<T>();
 
         [JsonProperty(PropertyName = "count")]
+        [JsonPropertyName("count")]
         public int Count { get; set; } = 0;
 
         [JsonProperty(PropertyName = "page")]
+        [JsonPropertyName("page")]
         public int Page { get; set; } = 0;
 
         [JsonProperty(PropertyName = "rowsPerPage")]
+        [JsonPropertyName("rowsPerPage")]
         public int RowsPerPage { get; set; } = 0;
 
         [JsonProperty(PropertyName = "sortOrder")]
+        [JsonPropertyName("sortOrder")]
         public DataTableSortOrderModel? SortOrder { get; set; }
 
         public void FilterAndOrderBy(IQueryable<T> queryable, DataTableRequestModel request)
