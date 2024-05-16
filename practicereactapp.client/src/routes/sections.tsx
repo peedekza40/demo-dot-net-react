@@ -12,6 +12,7 @@ export const LoginPage = lazy(() => import('src/pages/login'));
 export const RegisterPage = lazy(() => import('src/pages/register'));
 export const ProductsPage = lazy(() => import('src/pages/products'));
 export const Page404 = lazy(() => import('src/pages/page-not-found'));
+export const Page403 = lazy(() => import('src/pages/page-access-denied'));
 
 // ----------------------------------------------------------------------
 
@@ -46,6 +47,10 @@ export default function Router() {
         {
             path: '404',
             element: <Page404 />,
+        },
+        {
+            path: '403',
+            element: <Page403 />,
         },
         {
             path: '*',

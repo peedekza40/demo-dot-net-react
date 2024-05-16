@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using PracticeReactApp.Core.Constants;
 using PracticeReactApp.Core.Data.Entities;
 using PracticeReactApp.Infrastructures.Repositories.Interfaces;
 using PracticeReactApp.Infrastructures.Services.Interfaces;
@@ -18,13 +19,21 @@ namespace PracticeReactApp.Infrastructures.Services
         {
             var currentUser = GetCurrentUser() ?? new User();
             var roles = roleRepository.GetUserRoles(currentUser);
-            return menuRepository.GetByRoles(roles);
+            return menuRepository.GetByRoles(roles)
+                    .Where(x => x.IsActive == true && x.IsDisplay == true)
+                    .ToList();
         }
 
         public bool CurrentUserIsHavePermissionEndpoint(string? path)
         {
             var currentUser = GetCurrentUser();
             return currentUser != null ? IsHavePermissionEndpoint(currentUser, path) : false;
+        }
+
+        public bool CurrentUserIsHavePermissionPage(string? path)
+        {
+            var currentUser = GetCurrentUser();
+            return currentUser != null ? IsHavePermissionPage(currentUser, path) : false;
         }
 
         public bool IsHavePermissionEndpoint(User user, string? path)
@@ -37,6 +46,13 @@ namespace PracticeReactApp.Infrastructures.Services
             }
 
             return endpoints.Any(x => x.Path == path && x.IsActive == true);
+        }
+
+        public bool IsHavePermissionPage(User user, string? path)
+        {
+            var roles = roleRepository.GetUserRoles(user);
+            var menus = menuRepository.GetByRoles(roles);
+            return menus.Any(x => x.IsActive == true) || path == Base.HomePagePath;
         }
 
         private readonly UserManager<User> userManager;

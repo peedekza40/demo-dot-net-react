@@ -6,6 +6,7 @@ import config from "src/config.json";
 
 import UserProfile from "@/models/UserProfile";
 import LoginForm from "@/models/LoginForm";
+import Menu from "@/models/Menu";
 
 //declare type user profile
 type Props = {
@@ -22,27 +23,32 @@ interface IAuthContextValue {
     logout(
         callbackSuccess?: callbackSuccessType
     ): void,
-    isLogin(
+    isHavePermission(
+        path: string,
         callbackSuccess?: callbackSuccessType,
         callbackError?: callbackErrorType,
         callbackFinish?: callbackFinishType
     ): void,
     updateState(): void,
-    userProfile: UserProfile | null
+    userProfile: UserProfile | null,
+    menus: Menu[] | null
 }
 
+const menuStorageKey = "menu";
 const userProfileStorageKey = "userProfile";
 
 export const AuthContext = createContext<IAuthContextValue>(null!);
 
 function AuthProvider({ children }: Props) {
     const userProfileStorageValue = localStorage.getItem(userProfileStorageKey);
+    const menuStorageValue = localStorage.getItem(menuStorageKey);
+
     const [userProfile, setUserProfile] = useState<UserProfile | null>(userProfileStorageValue ? Object.assign(new UserProfile(), JSON.parse(userProfileStorageValue)) : null);
-    
+    const [menus, setMenus] = useState<Menu[] | null>(menuStorageValue ? JSON.parse(menuStorageValue ?? "") : null);
 
     const getUserProfile = () => {
         if (!userProfileStorageValue) {
-            axios.get('api/Account/GetCurrentUserProfile')
+            axios.get(config.basePathAPI + 'Account/GetCurrentUserProfile')
             .then(function (response) {
                 localStorage.setItem(userProfileStorageKey, JSON.stringify(response.data));
                 setUserProfile(Object.assign(new UserProfile(), response.data));
@@ -50,10 +56,22 @@ function AuthProvider({ children }: Props) {
         }
     };
 
-    const login = (values: LoginForm,
+    const getMenus = () => {
+        if (!menuStorageValue) {
+            axios.get(config.basePathAPI + 'Account/GetCurrentUserMenus')
+            .then(function (response) {
+                localStorage.setItem(menuStorageKey, JSON.stringify(response.data.data));
+                setMenus(response.data.data);
+            });
+        }
+    }
+
+    const login = (
+        values: LoginForm,
         callbackSuccess?: callbackSuccessType,
         callbackError?: callbackErrorType,
-        callbackFinish?: callbackFinishType) => {
+        callbackFinish?: callbackFinishType
+    ) => {
 
         axios.post(config.basePathAPI + 'login?useCookies=true', {
             "email": values.email,
@@ -90,12 +108,19 @@ function AuthProvider({ children }: Props) {
             });
     };
 
-    const isLogin = (
+    const isHavePermission = (
+        path: string,
         callbackSuccess?: callbackSuccessType,
         callbackError?: callbackErrorType,
-        callbackFinish?: callbackFinishType) => {
-
-        axios.get(config.basePathAPI + 'Account/IsLogin')
+        callbackFinish?: callbackFinishType
+    ) => {
+        axios.post(config.basePathAPI + 'Account/IsHavePermission', path,
+        {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }
+        )
             .then(function(response) {
                 if (callbackSuccess !== undefined && callbackSuccess !== null) {
                     callbackSuccess(response);
@@ -104,7 +129,6 @@ function AuthProvider({ children }: Props) {
             .catch(function(error) {
                 if (callbackError !== undefined && callbackError !== null) {
                     callbackError(error);
-                    localStorage.removeItem(userProfileStorageKey);
                 }
             })
             .finally(function() {
@@ -116,10 +140,11 @@ function AuthProvider({ children }: Props) {
 
     const updateState = () => {
         getUserProfile();
+        getMenus();
     };
 
     return (
-        <AuthContext.Provider value={{ login, logout, isLogin, updateState, userProfile }}>
+        <AuthContext.Provider value={{ login, logout, isHavePermission, updateState, userProfile, menus }}>
             {children}
         </AuthContext.Provider>
     );

@@ -42,7 +42,8 @@ export default function LoginView() {
 
     //check is logged in redirect to landing page
     const checkUserIsLogin = () => {
-        auth.isLogin(
+        auth.isHavePermission(
+            "/",
             () => {
                 setIsLoggedIn(true);
                 router.push('/');

@@ -10,6 +10,10 @@ namespace PracticeReactApp.Infrastructures.Services.Interfaces
 
         bool CurrentUserIsHavePermissionEndpoint(string? path);
 
+        bool CurrentUserIsHavePermissionPage(string? path);
+
         bool IsHavePermissionEndpoint(User user, string? path);
+
+        bool IsHavePermissionPage(User user, string? path);
     }
 }

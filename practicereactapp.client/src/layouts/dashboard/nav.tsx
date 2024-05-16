@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from 'react';
 
 import Box from '@mui/material/Box';
@@ -21,37 +22,21 @@ import Scrollbar from 'src/components/scrollbar';
 
 import { NAV } from './config-layout';
 import { useAuth } from 'src/hooks/use-auth';
-import { getCurrentUserMenus as getCurrentUserMenusApi } from 'src/apis/services/Account';
 import Menu from 'src/models/Menu';
 
 // ----------------------------------------------------------------------
 
-const menuStorageKey = "menu";
-
 export default function Nav({ openNav, onCloseNav }: {  openNav: boolean, onCloseNav: () => any}) {
     const auth = useAuth();
-    const pathname = usePathname();
     const upLg = useResponsive('up', 'lg');
-
-    const menuStorageValue = localStorage.getItem(menuStorageKey);
-    const [menus, setMenus] = useState<Menu[] | null>(menuStorageValue ? JSON.parse(menuStorageValue ?? "") : null);
 
     useEffect(() => {
         if (openNav) {
             onCloseNav();
         }
-        
+
         auth.updateState();
-
-        //get current user menu
-        if (!menuStorageValue) {
-            getCurrentUserMenusApi((response) => {
-                localStorage.setItem(menuStorageKey, JSON.stringify(response.data.data));
-                setMenus(response.data.data);
-            });
-        }
-
-    }, [pathname]);
+    });
 
     const renderAccount = (
         <Box
@@ -80,7 +65,7 @@ export default function Nav({ openNav, onCloseNav }: {  openNav: boolean, onClos
 
     const renderMenu = (
         <Stack component="nav" spacing={0.5} sx={{ px: 2 }}>
-            {menus?.map((item) => (
+            {auth.menus?.map((item) => (
                 <NavItem key={item.code} item={item} />
             ))}
         </Stack>

@@ -1,5 +1,4 @@
 /* eslint-disable react-refresh/only-export-components */
-import PropTypes from 'prop-types';
 import { memo, forwardRef, ReactNode } from 'react';
 
 import Box from '@mui/material/Box';

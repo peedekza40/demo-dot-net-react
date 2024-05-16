@@ -33,18 +33,17 @@ namespace PracticeReactApp.Server.Controllers
             return Ok(new ApiResponseViewModel<List<Menu>?>() { Data = menus });
         }
 
-        [HttpGet]
-        [Route("IsLogin")]
-        public IActionResult IsLogin()
-        {
-            return Ok(true);
-        }
-
-        [HttpGet]
+        [HttpPost]
         [Route("IsHavePermission")]
-        public IActionResult IsHavePermission(string path)
+        public IActionResult IsHavePermission([FromBody] string path)
         {
-            return Ok();
+            var result = accountSerivce.CurrentUserIsHavePermissionPage(path);
+            if(result == false)
+            {
+                return Forbid();
+            }
+
+            return Ok(true);
         }
 
         [HttpPost]

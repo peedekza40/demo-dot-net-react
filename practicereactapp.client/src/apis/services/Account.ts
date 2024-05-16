@@ -40,31 +40,3 @@ export async function isExistsEmail(email: string): Promise<{ data: boolean }> {
 
     return axios.post(config.basePathAPI + 'Account/IsExistsEmail', email, configRequest);
 }
-
-export async function getCurrentUserMenus(
-    callbackSuccess?: callbackSuccessType,
-    callbackError?: callbackErrorType,
-    callbackFinish?: callbackFinishType) {
-
-    axios.get(config.basePathAPI + 'Account/GetCurrentUserMenus',
-        {
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-        .then(function(response) {
-            if (callbackSuccess !== undefined && callbackSuccess !== null) {
-                callbackSuccess(response);
-            }
-        })
-        .catch(function(error) {
-            if (callbackError !== undefined && callbackError !== null) {
-                callbackError(error);
-            }
-        })
-        .finally(function() {
-            if (callbackFinish !== undefined && callbackFinish !== null) {
-                callbackFinish();
-            }
-        });
-}

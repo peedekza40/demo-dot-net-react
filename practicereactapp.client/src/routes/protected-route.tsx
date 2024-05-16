@@ -8,30 +8,36 @@ import { useAuth } from "src/hooks/use-auth";
 function ProtectedRoute(props: any) {
     const auth = useAuth();
     const navigate = useNavigate();
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [isHavePermission, setIsHavePermission] = useState(false);
 
     const location = useLocation();
     const { pathname } = location;
 
-    const checkUserIsLogin = () => {
-        auth.isLogin(
+    const checkUserIsHavePermission = () => {
+        auth.isHavePermission(
+            pathname,
             () => {
-                setIsLoggedIn(true);
+                setIsHavePermission(true);
             },
-            () => {
-                setIsLoggedIn(false);
-                return navigate('/login');
+            (error) => {
+                setIsHavePermission(false);
+                if(error.response.status == 403){
+                    return navigate('/403');
+                }
+                else{
+                    return navigate('/login');
+                }
             });
     }
 
     useEffect(() => {
-        checkUserIsLogin();
-    }, [isLoggedIn]);
+        checkUserIsHavePermission();
+    }, [isHavePermission]);
 
     return (
         <React.Fragment>
             {
-                isLoggedIn ? props.children : null
+                isHavePermission ? props.children : null
             }
         </React.Fragment>
     );
