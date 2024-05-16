@@ -33,15 +33,15 @@ stages:
             command: custom
             custom: tool
             arguments: install dotnet-ef
-        - script: mkdir $(build.artifactStagingDirectory)\migrations
+        - script: mkdir $(build.artifactStagingDirectory)/migrations
           displayName: 'Create migrations directory'
         - task: DotNetCoreCLI@2
           displayName: 'Create migrations bundle executable'
           inputs:
             command: custom
             custom: ef
-            arguments: migrations bundle --context $(dbContext) --project $(migrationProject) --startup-project $(startupProject)  --output $(build.artifactStagingDirectory)\migrations\migrationsbundle --self-contained
-        - script: cp -v $(startupProject)\appsettings.json $(build.artifactStagingDirectory)\migrations
+            arguments: migrations bundle --context $(dbContext) --project $(migrationProject) --startup-project $(startupProject)  --output $(build.artifactStagingDirectory)/migrations/migrationsbundle --self-contained
+        - script: cp -v $(startupProject)/appsettings.json $(build.artifactStagingDirectory)/migrations
           displayName: 'Copy appsettings.json to migrations artifacts folder'
         - publish: $(build.artifactStagingDirectory)
           displayName: Publish build artifacts to artifacts folder
@@ -58,5 +58,5 @@ stages:
             displayName: Download Artifact
             inputs:
               targetPath: $(build.artifactStagingDirectory)
-          - script: cd $(build.artifactStagingDirectory)\artifacts\migrations && chmod +x ./migrationsbundle && sudo -E ./migrationsbundle --connection '$(Postgres--MigrationConnection)'
+          - script: cd $(build.artifactStagingDirectory)/artifacts/migrations && chmod +x ./migrationsbundle && sudo -E ./migrationsbundle --connection '$(Postgres--MigrationConnection)'
             displayName: 'Execute migrations bundle'
