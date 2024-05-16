@@ -16,8 +16,8 @@ variables:
 jobs:
 - job: Job_1
   displayName: Agent job 1
-  pool:
-    name: Self Hosted Pipelines
+  # pool:
+  #   name: Self Hosted Pipelines
   steps:
   - checkout: self
     clean: true
