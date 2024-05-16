@@ -15,7 +15,7 @@ type Props = {
 
 interface IAuthContextValue {
     login(
-        values: LoginForm, 
+        values: LoginForm,
         callbackSuccess?: callbackSuccessType,
         callbackError?: callbackErrorType,
         callbackFinish?: callbackFinishType
@@ -82,17 +82,17 @@ function AuthProvider({ children }: Props) {
                     'Content-Type': 'application/json'
                 }
             })
-            .then(function(response) {
+            .then(function (response) {
                 if (callbackSuccess !== undefined && callbackSuccess !== null) {
                     callbackSuccess(response);
                 }
             })
-            .catch(function(error) {
+            .catch(function (error) {
                 if (callbackError !== undefined && callbackError !== null) {
                     callbackError(error);
                 }
             })
-            .finally(function() {
+            .finally(function () {
                 if (callbackFinish !== undefined && callbackFinish !== null) {
                     callbackFinish();
                 }
@@ -101,7 +101,7 @@ function AuthProvider({ children }: Props) {
 
     const logout = (callbackSuccess?: callbackSuccessType) => {
         axios.post(config.basePathAPI + 'Account/Logout')
-            .then(function(response) {
+            .then(function (response) {
                 if (callbackSuccess !== undefined && callbackSuccess !== null) {
                     callbackSuccess(response);
                 }
@@ -126,12 +126,12 @@ function AuthProvider({ children }: Props) {
                     callbackSuccess(response);
                 }
             })
-            .catch(function(error) {
+            .catch(function (error) {
                 if (callbackError !== undefined && callbackError !== null) {
                     callbackError(error);
                 }
             })
-            .finally(function() {
+            .finally(function () {
                 if (callbackFinish !== undefined && callbackFinish !== null) {
                     callbackFinish();
                 }
@@ -151,4 +151,3 @@ function AuthProvider({ children }: Props) {
 }
 
 export default AuthProvider;
-

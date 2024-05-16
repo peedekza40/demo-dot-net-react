@@ -83,9 +83,9 @@ export default function RegisterView() {
                 autoComplete='off'
                 onSubmit={handleSubmit(onSubmitHandler)}
             >
-                <ErrorAlert 
-                    isHasError={isHasError} 
-                    errorResponse={errorResponse}/>
+                <ErrorAlert
+                    isHasError={isHasError}
+                    errorResponse={errorResponse} />
                 <Stack spacing={3} sx={{ my: 3 }}>
                     <TextField
                         label="First name *"
@@ -161,7 +161,7 @@ export default function RegisterView() {
             </Box>
         </FormProvider>
     );
-    
+
     return (
         <Box
             sx={{

@@ -46,7 +46,7 @@ function FormDialog<T extends FieldValues>({ formSchema, dialogTitle, isOpen, re
     } = methods;
 
     useEffect(() => {
-        if(isOpen) {
+        if (isOpen) {
             reset();
         }
     }, [isSubmitSuccessful, reset, isOpen]);

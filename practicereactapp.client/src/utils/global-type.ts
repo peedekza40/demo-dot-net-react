@@ -6,8 +6,8 @@ export type callbackFinishType = () => any;
 
 export type ErrorResponse = {
     errors: {
-       code: string;
-       description: string; 
+        code: string;
+        description: string;
     }[];
     succeeded: boolean
 }

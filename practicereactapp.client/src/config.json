@@ -1,4 +1,4 @@
 {
-    "basePathAPI" : "api/",
-    "passwordMinLength" : 8
+  "basePathAPI": "api/",
+  "passwordMinLength": 8
 }

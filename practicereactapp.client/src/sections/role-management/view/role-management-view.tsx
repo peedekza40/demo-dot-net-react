@@ -11,7 +11,7 @@ import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
 import MUIDataTable from "mui-datatables/dist";
-import { plainToClass } from "class-transformer"; 
+import { plainToClass } from "class-transformer";
 
 import Iconify from 'src/components/iconify';
 import { errorSweetAlert } from 'src/components/error-alert';
@@ -90,10 +90,10 @@ function RoleManagementView() {
     ];
 
     const search = (tableState: DataTableOption) => {
-        setDataTableOption({ 
-            ...dataTableOption, 
+        setDataTableOption({
+            ...dataTableOption,
             sortOrder: tableState.sortOrder,
-            isLoading: true 
+            isLoading: true
         });
 
         searchApi(tableState,
@@ -241,8 +241,8 @@ function RoleManagementView() {
                     helperText={errors?.mode?.message}
                     value={formRoleData.mode}
                     InputProps={{ readOnly: true }}
-                    sx={{ 
-                        display: 'none' 
+                    sx={{
+                        display: 'none'
                     }}
                 >
                     {actionModes.map((item, index) => (
@@ -289,7 +289,7 @@ function RoleManagementView() {
                 isOpen={formRoleIsOpen}
                 onSubmit={onSubmit}
                 onClose={() => setFormRoleIsOpen(false)}
-                renderField={renderField}/>
+                renderField={renderField} />
         </Container>
     );
 }

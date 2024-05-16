@@ -1,0 +1,45 @@
+# ASP.NET Core
+# Build and test ASP.NET Core projects targeting .NET Core.
+# Add steps that run tests, create a NuGet package, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+
+trigger:
+- main
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  projectDirectory: '**/PracticeReactApp.Server'
+  projectFile: '$(projectDirectory)/PracticeReactApp.Server.csproj'
+
+jobs:
+- job: Job_1
+  displayName: Agent job 1
+  pool:
+    name: Self Hosted Pipelines
+  steps:
+  - checkout: self
+    clean: true
+    fetchDepth: 1
+  - task: DotNetCoreCLI@2
+    displayName: Restore
+    inputs:
+      command: 'restore'
+      feedsToUse: 'select'
+  - task: DotNetCoreCLI@2
+    displayName: Build
+    inputs:
+      projects: $(projectFile)
+      arguments: --configuration $(BuildConfiguration)
+  - task: DotNetCoreCLI@2
+    displayName: Publish
+    inputs:
+      command: publish
+      publishWebProjects: false
+      projects: $(projectFile)
+      arguments: --configuration $(BuildConfiguration) --output $(build.artifactstagingdirectory)
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publish Artifact: drop'
+    inputs:
+      PathtoPublish: $(build.artifactstagingdirectory)

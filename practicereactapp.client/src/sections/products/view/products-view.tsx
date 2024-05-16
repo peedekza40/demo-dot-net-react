@@ -15,49 +15,49 @@ import ProductCartWidget from '../product-cart-widget';
 // ----------------------------------------------------------------------
 
 export default function ProductsView() {
-  const [openFilter, setOpenFilter] = useState(false);
+    const [openFilter, setOpenFilter] = useState(false);
 
-  const handleOpenFilter = () => {
-    setOpenFilter(true);
-  };
+    const handleOpenFilter = () => {
+        setOpenFilter(true);
+    };
 
-  const handleCloseFilter = () => {
-    setOpenFilter(false);
-  };
+    const handleCloseFilter = () => {
+        setOpenFilter(false);
+    };
 
-  return (
-    <Container>
-      <Typography variant="h4" sx={{ mb: 5 }}>
-        Products
-      </Typography>
+    return (
+        <Container>
+            <Typography variant="h4" sx={{ mb: 5 }}>
+                Products
+            </Typography>
 
-      <Stack
-        direction="row"
-        alignItems="center"
-        flexWrap="wrap-reverse"
-        justifyContent="flex-end"
-        sx={{ mb: 5 }}
-      >
-        <Stack direction="row" spacing={1} flexShrink={0} sx={{ my: 1 }}>
-          <ProductFilters
-            openFilter={openFilter}
-            onOpenFilter={handleOpenFilter}
-            onCloseFilter={handleCloseFilter}
-          />
+            <Stack
+                direction="row"
+                alignItems="center"
+                flexWrap="wrap-reverse"
+                justifyContent="flex-end"
+                sx={{ mb: 5 }}
+            >
+                <Stack direction="row" spacing={1} flexShrink={0} sx={{ my: 1 }}>
+                    <ProductFilters
+                        openFilter={openFilter}
+                        onOpenFilter={handleOpenFilter}
+                        onCloseFilter={handleCloseFilter}
+                    />
 
-          <ProductSort />
-        </Stack>
-      </Stack>
+                    <ProductSort />
+                </Stack>
+            </Stack>
 
-      <Grid container spacing={3}>
-        {products.map((product) => (
-          <Grid key={product.id} xs={12} sm={6} md={3}>
-            <ProductCard product={product} />
-          </Grid>
-        ))}
-      </Grid>
+            <Grid container spacing={3}>
+                {products.map((product) => (
+                    <Grid key={product.id} xs={12} sm={6} md={3}>
+                        <ProductCard product={product} />
+                    </Grid>
+                ))}
+            </Grid>
 
-      <ProductCartWidget />
-    </Container>
-  );
+            <ProductCartWidget />
+        </Container>
+    );
 }

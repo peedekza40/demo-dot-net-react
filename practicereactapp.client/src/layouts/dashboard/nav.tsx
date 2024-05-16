@@ -35,6 +35,7 @@ export default function Nav({ openNav, onCloseNav }: {  openNav: boolean, onClos
             onCloseNav();
         }
 
+
         auth.updateState();
     });
 
@@ -137,7 +138,7 @@ function NavItem({ item }: { item: Menu }) {
 
     const active = item.path === pathname;
 
-    if(item.isDisplay){
+    if (item.isDisplay) {
         return (
             <ListItemButton
                 component={RouterLink}
@@ -162,7 +163,7 @@ function NavItem({ item }: { item: Menu }) {
                 <Box component="span" sx={{ width: 24, height: 24, mr: 2 }}>
                     {icon(item.icon ?? "")}
                 </Box>
-    
+
                 <Box component="span">{item.name} </Box>
             </ListItemButton>
         );

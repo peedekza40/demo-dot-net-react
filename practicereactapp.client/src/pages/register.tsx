@@ -5,9 +5,9 @@ export default function Register() {
     return (
         <>
             <Helmet>
-            <title> Register | Minimal UI </title>
+                <title> Register | Minimal UI </title>
             </Helmet>
-    
+
             <RegisterView />
         </>
     );
