@@ -15,8 +15,8 @@ variables:
 stages:
   - stage:
     displayName: Build
-    pool:
-      name: Self Hosted Pipelines
+    # pool:
+    #   name: Self Hosted Pipelines
     jobs:
     - job:
       displayName: Build Migrations Bundle Executable
