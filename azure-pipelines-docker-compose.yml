@@ -33,6 +33,8 @@ stages:
     - job:
       displayName: Run docker compose
       steps:
+      - checkout: none
+        displayName: Skip Git Clone
       - task: DownloadPipelineArtifact@2
         displayName: Download Artifact
         inputs:
