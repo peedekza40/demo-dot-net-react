@@ -33,12 +33,13 @@ stages:
     - job:
       displayName: Run docker compose
       steps:
-      - powershell: |
-          Write-Host "Show all folder content"
-          Get-ChildItem -Path $(build.artifactStagingDirectory)\*.* -Recurse -Force
-        errorActionPreference: continue
-        displayName: 'PowerShell Script List folder structure'
-        continueOnError: true
+      - task: PowerShell@2
+        inputs:
+          targetType: 'inline'
+          script: |
+            Write-Host "Show all folder content"
+                      
+            Get-ChildItem -Path $(build.artifactStagingDirectory)\*.* -Recurse -Force
       # - task: CopyFilesOverSSH@0
       #   displayName: Copy docker compose file to target
       #   inputs:
