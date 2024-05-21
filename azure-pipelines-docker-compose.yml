@@ -1,0 +1,28 @@
+# Docker
+# Build a Docker image
+# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
+
+trigger:
+- main
+
+resources:
+- repo: self
+
+variables:
+  tag: '$(Build.BuildId)'
+
+stages:
+- stage: Build
+  displayName: Build image
+  jobs:
+  - job: Build
+    displayName: Build
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+      - script: mkdir $(build.artifactStagingDirectory)/docker
+        displayName: 'Create docker directory'
+      - script: cp -v docker-compose.yml $(build.artifactStagingDirectory)/docker
+        displayName: 'Copy docker-compose.yml to docker artifacts folder'
+
+
