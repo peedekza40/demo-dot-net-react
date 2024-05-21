@@ -33,6 +33,10 @@ stages:
     - job:
       displayName: Run docker compose
       steps:
+      - task: DownloadPipelineArtifact@2
+        displayName: Download Artifact
+        inputs:
+          targetPath: $(build.artifactStagingDirectory)
       - task: PowerShell@2
         displayName: Show all folder content
         inputs:
