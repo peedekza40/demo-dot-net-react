@@ -14,39 +14,39 @@ variables:
 
 
 stages:
-  # - stage:
-  #   displayName: Build
-  #   # pool:
-  #   #   name: Self Hosted Pipelines
-  #   jobs:
-  #   - job:
-  #     displayName: Build Migrations Bundle Executable
-  #     steps:
-  #       - task: DotNetCoreCLI@2
-  #         displayName: 'create dotnet tool manifest'
-  #         inputs:
-  #           command: custom
-  #           custom: new
-  #           arguments: tool-manifest
-  #       - task: DotNetCoreCLI@2
-  #         displayName: 'Install ef tools'
-  #         inputs:
-  #           command: custom
-  #           custom: tool
-  #           arguments: install dotnet-ef
-  #       - script: mkdir $(build.artifactStagingDirectory)/migrations
-  #         displayName: 'Create migrations directory'
-  #       - task: DotNetCoreCLI@2
-  #         displayName: 'Create migrations bundle executable'
-  #         inputs:
-  #           command: custom
-  #           custom: ef
-  #           arguments: migrations bundle --context $(dbContext) --project $(migrationProject) --startup-project $(startupProject)  --output $(build.artifactStagingDirectory)/migrations/migrationsbundle --self-contained
-  #       - script: cp -v $(startupProject)/appsettings.json $(build.artifactStagingDirectory)/migrations
-  #         displayName: 'Copy appsettings.json to migrations artifacts folder'
-  #       - publish: $(build.artifactStagingDirectory)
-  #         displayName: Publish build artifacts to artifacts folder
-  #         artifact: drop
+  - stage:
+    displayName: Build
+    # pool:
+    #   name: Self Hosted Pipelines
+    jobs:
+    - job:
+      displayName: Build Migrations Bundle Executable
+      steps:
+        - task: DotNetCoreCLI@2
+          displayName: 'create dotnet tool manifest'
+          inputs:
+            command: custom
+            custom: new
+            arguments: tool-manifest
+        - task: DotNetCoreCLI@2
+          displayName: 'Install ef tools'
+          inputs:
+            command: custom
+            custom: tool
+            arguments: install dotnet-ef
+        - script: mkdir $(build.artifactStagingDirectory)/migrations
+          displayName: 'Create migrations directory'
+        - task: DotNetCoreCLI@2
+          displayName: 'Create migrations bundle executable'
+          inputs:
+            command: custom
+            custom: ef
+            arguments: migrations bundle --context $(dbContext) --project $(migrationProject) --startup-project $(startupProject)  --output $(build.artifactStagingDirectory)/migrations/migrationsbundle --self-contained
+        - script: cp -v $(startupProject)/appsettings.json $(build.artifactStagingDirectory)/migrations
+          displayName: 'Copy appsettings.json to migrations artifacts folder'
+        - publish: $(build.artifactStagingDirectory)
+          displayName: Publish build artifacts to artifacts folder
+          artifact: drop
   - stage:
     displayName: Deployment
     jobs:
