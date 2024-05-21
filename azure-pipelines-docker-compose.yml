@@ -39,13 +39,12 @@ stages:
         displayName: Download Artifact
         inputs:
           targetPath: $(build.artifactStagingDirectory)
-      - task: PowerShell@2
-        displayName: Show all folder content
-        inputs:
-          targetType: 'inline'
-          script: |
-            Write-Host "Show all folder content"
-            Get-ChildItem -Path $(build.artifactStagingDirectory)\*.* -Recurse -Force
+      - powershell: |
+          Write-Host "Show all folder content"
+          Get-ChildItem -Path $(build.artifactStagingDirectory)\*.* -Recurse -Force
+        errorActionPreference: continue
+        displayName: 'PowerShell Script List folder structure'
+          #   continueOnError: true
       # - task: CopyFilesOverSSH@0
       #   displayName: Copy docker compose file to target
       #   inputs:
