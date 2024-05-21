@@ -14,8 +14,8 @@ variables:
   projectFile: '$(projectDirectory)/PracticeReactApp.Server.csproj'
 
 jobs:
-- job: Job_1
-  displayName: Agent job 1
+- job:
+  displayName: Build back-end .net api
   # pool:
   #   name: Self Hosted Pipelines
   steps:
