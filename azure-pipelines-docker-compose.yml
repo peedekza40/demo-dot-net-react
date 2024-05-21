@@ -20,10 +20,10 @@ stages:
   - job: Build
     displayName: Build
     steps:
-      - script: mkdir $(dockerSourceDirectory)
-        displayName: 'Create docker directory'
-      - script: cp -v docker-compose.yml $(dockerSourceDirectory)
-        displayName: 'Copy docker-compose.yml to docker artifacts folder'
+    - script: mkdir $(dockerSourceDirectory)
+      displayName: 'Create docker directory'
+    - script: cp -v docker-compose.yml $(dockerSourceDirectory)
+      displayName: 'Copy docker-compose.yml to docker artifacts folder'
 - stage: Deployment
   displayName: Deployment
   jobs:
