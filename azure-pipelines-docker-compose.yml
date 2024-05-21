@@ -55,7 +55,7 @@ stages:
           runOptions: 'commands'
           commands: |
             cd $(deployDirectory)
-            cd $(deployDirectory)
+            cd docker
             pwd
             # docker compose pull 
             # docker compose stop
