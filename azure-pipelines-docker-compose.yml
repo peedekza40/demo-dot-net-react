@@ -54,7 +54,7 @@ stages:
           sshEndpoint: 'vm-dev-postgres'
           runOptions: 'commands'
           commands: |
-            cd $(deployDirectory) &&
+            cd $(deployDirectory) && \
             pwd
             # docker compose pull 
             # docker compose stop
