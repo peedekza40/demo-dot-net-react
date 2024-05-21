@@ -58,11 +58,11 @@ stages:
             displayName: Download Artifact
             inputs:
               targetPath: $(build.artifactStagingDirectory)
-          # - script: cd $(build.artifactStagingDirectory)/migrations && chmod +x ./migrationsbundle && sudo -E ./migrationsbundle --connection '$(Postgres--MigrationConnection)'
-          #   displayName: 'Execute migrations bundle'
-          - powershell: |
-              Write-Host "Show all folder content"
-              Get-ChildItem -Path $(build.artifactStagingDirectory)\*.* -Recurse -Force
-            errorActionPreference: continue
-            displayName: 'PowerShell Script List folder structure'
-            continueOnError: true
+          - script: cd $(build.artifactStagingDirectory)/drop/migrations && chmod +x ./migrationsbundle && sudo -E ./migrationsbundle --connection '$(Postgres--MigrationConnection)'
+            displayName: 'Execute migrations bundle'
+          # - powershell: |
+          #     Write-Host "Show all folder content"
+          #     Get-ChildItem -Path $(build.artifactStagingDirectory)\*.* -Recurse -Force
+          #   errorActionPreference: continue
+          #   displayName: 'PowerShell Script List folder structure'
+          #   continueOnError: true
