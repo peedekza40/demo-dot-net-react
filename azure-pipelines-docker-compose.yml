@@ -31,19 +31,18 @@ stages:
   displayName: Deployment
   jobs:
     - job:
-      displayName: Copy docker compose file to target
+      displayName: Run docker compose
       steps:
       - task: CopyFilesOverSSH@0
+        displayName: Copy docker compose file to target
         inputs:
           sshEndpoint: 'vm-dev-postgres'
           sourceFolder: $(dockerSourceDirectory)
           contents: '**'
           targetFolder: $(deployDirectory)
           readyTimeout: '20000'
-    - job:
-      displayName: Run docker compose
-      steps:
       - task: SSH@0
+        displayName: Run docker compose command
         inputs:
           sshEndpoint: 'vm-dev-postgres'
           runOptions: 'commands'
