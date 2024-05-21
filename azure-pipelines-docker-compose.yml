@@ -24,6 +24,9 @@ stages:
       displayName: 'Create docker directory'
     - script: cp -v docker-compose.yml $(dockerSourceDirectory)
       displayName: 'Copy docker-compose.yml to docker artifacts folder'
+    - publish: $(build.artifactStagingDirectory)
+      displayName: Publish build artifacts to artifacts folder
+      artifact: drop
 - stage: Deployment
   displayName: Deployment
   jobs:
