@@ -54,7 +54,7 @@ stages:
           sshEndpoint: 'vm-dev-postgres'
           runOptions: 'commands'
           commands: |
-            cd $(deployDirectory) && docker compose pull --progress quiet && docker compose stop --progress quiet && docker compose rm -f --progress quiet && docker compose up -d --progress quiet
+            cd $(deployDirectory) && docker compose --quiet pull && docker compose stop --quiet && docker compose rm -f --quiet && docker compose up -d --quiet
           readyTimeout: '20000'
       # - powershell: |
       #     Write-Host "Show all folder content"
