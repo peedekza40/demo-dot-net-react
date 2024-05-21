@@ -8,9 +8,6 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
-resources:
-- repo: self
-
 variables:
   tag: '$(Build.BuildId)'
   dockerSourceDirectory: '$(build.artifactStagingDirectory)/docker'
