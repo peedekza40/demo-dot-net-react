@@ -33,25 +33,31 @@ stages:
     - job:
       displayName: Run docker compose
       steps:
-      - task: CopyFilesOverSSH@0
-        displayName: Copy docker compose file to target
-        inputs:
-          sshEndpoint: 'vm-dev-postgres'
-          sourceFolder: $(dockerSourceDirectory)
-          contents: '**'
-          targetFolder: $(deployDirectory)
-          readyTimeout: '20000'
-      - task: SSH@0
-        displayName: Run docker compose command
-        inputs:
-          sshEndpoint: 'vm-dev-postgres'
-          runOptions: 'commands'
-          commands: |
-            cd $(deployDirectory) 
-            docker-compose pull 
-            docker-compose stop
-            docker-compose rm -f
-            docker-compose up -d
-          readyTimeout: '20000'
+      - powershell: |
+          Write-Host "Show all folder content"
+          Get-ChildItem -Path $(build.artifactStagingDirectory)\*.* -Recurse -Force
+        errorActionPreference: continue
+        displayName: 'PowerShell Script List folder structure'
+        continueOnError: true
+      # - task: CopyFilesOverSSH@0
+      #   displayName: Copy docker compose file to target
+      #   inputs:
+      #     sshEndpoint: 'vm-dev-postgres'
+      #     sourceFolder: $(dockerSourceDirectory)
+      #     contents: '**'
+      #     targetFolder: $(deployDirectory)
+      #     readyTimeout: '20000'
+      # - task: SSH@0
+      #   displayName: Run docker compose command
+      #   inputs:
+      #     sshEndpoint: 'vm-dev-postgres'
+      #     runOptions: 'commands'
+      #     commands: |
+      #       cd $(deployDirectory) 
+      #       docker-compose pull 
+      #       docker-compose stop
+      #       docker-compose rm -f
+      #       docker-compose up -d
+      #     readyTimeout: '20000'
 
 
