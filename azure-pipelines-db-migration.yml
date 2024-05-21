@@ -1,5 +1,5 @@
 trigger:
-  - main
+  - release-azure
 
 pr: none
 
