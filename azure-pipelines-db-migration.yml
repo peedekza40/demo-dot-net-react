@@ -10,42 +10,43 @@ variables:
   dbContext: 'PracticeDotnetReactContext'
   startupProject: 'PracticeReactApp.Server'
   migrationProject: 'PracticeReactApp.Migrations'
+  connectionString: 'Server=4.145.80.1;Port=5432;Database=practice_dotnet_react;User Id=postgres;Password=pass@word1;Pooling=true;MinPoolSize=0;MaxPoolSize=50;'
 
 
 stages:
-  - stage:
-    displayName: Build
-    # pool:
-    #   name: Self Hosted Pipelines
-    jobs:
-    - job:
-      displayName: Build Migrations Bundle Executable
-      steps:
-        - task: DotNetCoreCLI@2
-          displayName: 'create dotnet tool manifest'
-          inputs:
-            command: custom
-            custom: new
-            arguments: tool-manifest
-        - task: DotNetCoreCLI@2
-          displayName: 'Install ef tools'
-          inputs:
-            command: custom
-            custom: tool
-            arguments: install dotnet-ef
-        - script: mkdir $(build.artifactStagingDirectory)/migrations
-          displayName: 'Create migrations directory'
-        - task: DotNetCoreCLI@2
-          displayName: 'Create migrations bundle executable'
-          inputs:
-            command: custom
-            custom: ef
-            arguments: migrations bundle --context $(dbContext) --project $(migrationProject) --startup-project $(startupProject)  --output $(build.artifactStagingDirectory)/migrations/migrationsbundle --self-contained
-        - script: cp -v $(startupProject)/appsettings.json $(build.artifactStagingDirectory)/migrations
-          displayName: 'Copy appsettings.json to migrations artifacts folder'
-        - publish: $(build.artifactStagingDirectory)
-          displayName: Publish build artifacts to artifacts folder
-          artifact: drop
+  # - stage:
+  #   displayName: Build
+  #   # pool:
+  #   #   name: Self Hosted Pipelines
+  #   jobs:
+  #   - job:
+  #     displayName: Build Migrations Bundle Executable
+  #     steps:
+  #       - task: DotNetCoreCLI@2
+  #         displayName: 'create dotnet tool manifest'
+  #         inputs:
+  #           command: custom
+  #           custom: new
+  #           arguments: tool-manifest
+  #       - task: DotNetCoreCLI@2
+  #         displayName: 'Install ef tools'
+  #         inputs:
+  #           command: custom
+  #           custom: tool
+  #           arguments: install dotnet-ef
+  #       - script: mkdir $(build.artifactStagingDirectory)/migrations
+  #         displayName: 'Create migrations directory'
+  #       - task: DotNetCoreCLI@2
+  #         displayName: 'Create migrations bundle executable'
+  #         inputs:
+  #           command: custom
+  #           custom: ef
+  #           arguments: migrations bundle --context $(dbContext) --project $(migrationProject) --startup-project $(startupProject)  --output $(build.artifactStagingDirectory)/migrations/migrationsbundle --self-contained
+  #       - script: cp -v $(startupProject)/appsettings.json $(build.artifactStagingDirectory)/migrations
+  #         displayName: 'Copy appsettings.json to migrations artifacts folder'
+  #       - publish: $(build.artifactStagingDirectory)
+  #         displayName: Publish build artifacts to artifacts folder
+  #         artifact: drop
   - stage:
     displayName: Deployment
     jobs:
@@ -58,7 +59,7 @@ stages:
             displayName: Download Artifact
             inputs:
               targetPath: $(build.artifactStagingDirectory)
-          - script: cd $(build.artifactStagingDirectory)/drop/migrations && chmod +x ./migrationsbundle && sudo -E ./migrationsbundle --connection '$(Postgres--MigrationConnection)'
+          - script: cd $(build.artifactStagingDirectory)/drop/migrations && chmod +x ./migrationsbundle && sudo -E ./migrationsbundle --connection '$(connectionString)'
             displayName: 'Execute migrations bundle'
           # - powershell: |
           #     Write-Host "Show all folder content"
