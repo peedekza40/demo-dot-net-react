@@ -5,9 +5,12 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <InvariantGlobalization>true</InvariantGlobalization>
-    <SpaRoot>..\practicereactapp.client</SpaRoot>
-    <SpaProxyLaunchCommand>npm run dev</SpaProxyLaunchCommand>
-    <SpaProxyServerUrl>https://localhost:5173</SpaProxyServerUrl>
+    <!-- <SpaRoot>..\practicereactapp.client</SpaRoot> -->
+    <!-- <SpaProxyLaunchCommand>npm run dev</SpaProxyLaunchCommand> -->
+    <!-- <SpaProxyServerUrl>https://localhost:5173</SpaProxyServerUrl> -->
+    <SpaRoot>..\practiceangular.client</SpaRoot>
+    <SpaProxyLaunchCommand>npm run ng serve</SpaProxyLaunchCommand>
+    <SpaProxyServerUrl>http://localhost:4200</SpaProxyServerUrl>
   </PropertyGroup>
 
   <ItemGroup>
