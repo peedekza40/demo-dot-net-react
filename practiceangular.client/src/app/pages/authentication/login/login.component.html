@@ -49,17 +49,27 @@
   
             <div class="or-border m-t-30">or sign in with</div> -->
   
-            <form class="m-t-30">
-              <mat-label class="mat-subtitle-2 f-s-14 f-w-600 m-b-12 d-block"
+            <form class="m-t-30" 
+              [formGroup]="loginForm"
+              (ngSubmit)="submitForm()">
+              <mat-label class="mat-subtitle-2 f-s-14 m-b-12 f-w-600 d-block"
                 >Username</mat-label
               >
               <mat-form-field appearance="outline" class="w-100" color="primary">
-                <input matInput />
+                <input matInput 
+                  id="email"
+                  [formControl]="loginForm.get('email')"
+                  required/>
+                @if(loginForm.get('email')?.invalid && loginForm.get('email')?.touched){
+                  <mat-error>{{loginForm.get('email').errors?.message}}</mat-error>
+                }
               </mat-form-field>
+
               <!-- password -->
-              <mat-label class="mat-subtitle-2 f-s-14 f-w-600 m-b-12 d-block"
-                >Password</mat-label
-              >
+              <mat-label class="mat-subtitle-2 f-s-14 f-w-600 m-b-12 d-block">
+                Password
+              </mat-label>
+
               <mat-form-field appearance="outline" class="w-100" color="primary">
                 <input matInput type="password" />
               </mat-form-field>
@@ -72,9 +82,13 @@
                   >Forgot Password ?</a
                 >
               </div>
-              <a [routerLink]="['/']" mat-flat-button color="primary" class="w-100">
+              <button 
+                mat-flat-button 
+                color="primary" 
+                class="w-100"
+                type="submit">
                 Sign In
-              </a>
+              </button>
               <!-- input -->
             </form>
             <span class="d-block f-w-500 text-center m-t-24"

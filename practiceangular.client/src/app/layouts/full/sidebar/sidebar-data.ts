@@ -15,11 +15,11 @@ export const navItems: NavItem[] = [
   {
     displayName: 'Login',
     iconName: 'lock',
-    route: '/authentication/login',
+    route: '/auth/login',
   },
   {
     displayName: 'Register',
     iconName: 'user-plus',
-    route: '/authentication/register',
+    route: '/auth/register',
   },
 ];
